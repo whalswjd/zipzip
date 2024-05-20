@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- 헤더 시작 -->
+    <div th:replace="/common/header :: header"></div>
+    <!-- 헤더 끝 -->
+
+    <!-- 개별 css -->
+    <style type="text/css">
+        ul,
+        li {
+            list-style: none;
+        }
+
+        .valid {
+            color: red;
+        }
+
+        #layerPop {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0005;
+        }
+
+        .on {
+            display: block !important;
+        }
+
+        #layerPop>#popup {
+            width: 600px;
+            height: auto;
+            background: #fff;
+            position: absolute;
+            padding: 15px;
+            box-sizing: border-box;
+            border-radius: 15px;
+            box-shadow: 7px 7px 5px #0002;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .clearfix::after {
+            content: "";
+            display: block;
+            clear: both;
+        }
+
+        #joinForm {
+            width: 460px;
+            margin: 0 auto;
+        }
+
+        ul.join_box {
+            border: 1px solid #ddd;
+            background-color: #fff;
+        }
+
+        .checkBox,
+        .checkBox>ul {
+            position: relative;
+        }
+
+        .checkBox>ul>li {
+            float: left;
+        }
+
+        .checkBox>ul>li:first-child {
+            width: 85%;
+            padding: 15px;
+            font-weight: 600;
+            color: #888;
+        }
+
+        .checkBox>ul>li:nth-child(2) {
+            position: absolute;
+            top: 50%;
+            right: 30px;
+            margin-top: -12px;
+        }
+
+        .checkBox textarea {
+            width: 96%;
+            height: 90px;
+            margin: 0 2%;
+            background-color: #f7f7f7;
+            color: #888;
+            border: none;
+            resize: none;
+        }
+
+        .footBtwrap {
+            margin-top: 15px;
+        }
+
+        .footBtwrap>li {
+            float: left;
+            width: 50%;
+            height: 60px;
+        }
+
+        .footBtwrap>li>button {
+            display: block;
+            width: 100%;
+            height: 100%;
+            font-size: 20px;
+            text-align: center;
+            line-height: 60px;
+        }
+
+        .btn1 {
+            border: none;
+            background-color: #fff;
+            color: #888
+        }
+
+        .btn2 {
+            border: none;
+            background-color: #fff;
+            color: #888
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 네비 시작 -->
+    <div th:replace="/common/nav :: nav"></div>
+    <!-- 네비 끝 -->
+
+    <!-- 본문 시작 -->
+    <div style="height: 13vh;"></div>
+    <div class="section">
+        <div class="container p-5 h-100">
+            <div class="row d-flex align-items-center justify-content-center h-100">
+                <div class="col-md-7 col-lg-5 col-xl-5">
+
+                    <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">회원 정보 수정</p>
+
+                    <form id="modifyForm" action="#" method="post">
+
+                        <div class="d-flex flex-column mb-3">
+                            <div class="d-flex flex-row">
+                                <div class="form-floating flex-fill mb-0">
+                                    <input type="text" class="form-control" id="userId2" name="userId2" th:value="${user.userId}" readonly>
+                                    <label for="userId">사용자 아이디:</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-column mb-3">
+                            <div class="d-flex flex-row">
+                                <div class="form-floating flex-fill mb-0">
+                                    <input type="text" class="form-control" id="userName" name="userName" th:value="${user.userName}"placeholder="사용자 이름" required>
+                                    <label for="userName">사용자 이름</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-column mb-3">
+                            <div class="d-flex flex-row">
+                                <div class="form-floating flex-fill mb-0">
+                                    <input type="password" class="form-control" id="userPwd1" name="userPwd1" th:value="${user.userPwd}" placeholder="사용자 비밀번호" required>
+                                    <label for="userPwd1">사용자 비밀번호</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-column mb-3">
+                            <div class="d-flex flex-row">
+                                <div class="form-floating flex-fill mb-0">
+                                    <input type="password" class="form-control" id="userPwd2" name="userPwd2" th:value="${user.userPwd}" placeholder="사용자 비밀번호 확인" required>
+                                    <label for="userPwd2">사용자 비밀번호 확인</label><br>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-column mb-3">
+                            <div class="d-flex flex-row">
+                                <div class="form-floating flex-fill mb-0">
+                                    <input type= "text" class="form-control" id="userPhone" name="userPhone" th:value="${user.userPhone}" placeholder="사용자 전화번호" required>
+                                    <label for="userPhone">사용자 전화번호</label><br>      
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-column mb-3">
+                            <div class="d-flex flex-row">
+                                <div class="form-floating flex-fill mb-0">
+                                    <input type="email" class="form-control" id="userEmail" name="userEmail" th:value="${user.userEmail}" placeholder="사용자 이메일" required>
+                                    <label for="userEmail">사용자 이메일</label><br>  
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-center mx-4">
+                            <input type="hidden" id="userId" name="userId" th:value="${user.userId}">
+                            <button type="submit" id="btnModify" name="btnModify" class="btn btn-primary w-100 py-2">수정하기</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 본문 끝 -->
+
+    <!-- 푸터 시작 -->
+    <footer th:replace="/common/footer :: footer"></footer>
+    <!-- 푸터 끝 -->
+
+    <!-- 개별 js -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#modifyForm").submit(function(event) {
+                event.preventDefault();
+                
+                $.ajax({
+                    type: "POST",
+                    url: "/modifyUserProc",
+                    data: JSON.stringify({
+                        userId: $('#userId').val(),
+                        userName: $('#userName').val(),
+                        userPwd: $('#userPwd1').val(),
+                        userPhone: $('#userPhone').val(),
+                        userEmail: $('#userEmail').val()
+                    }),
+                    contentType: "application/json",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("AJAX", "true");
+                    },
+                    success: function (response) {
+                        alert("정상적으로 수정되었습니다.");
+                        location.href = "/user/modifyUser";
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

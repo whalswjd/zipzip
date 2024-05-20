@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+  
+<!-- 헤더 시작--> 
+    <div th:replace="/common/header :: header"></div>
+<!-- 헤더 끝 -->
+
+<style>
+@font-face {
+   font-family: 'Ha';
+   src: url('/resources/fonts/kor/HANAMDAUM_Body.woff2') format('woff');
+}
+::-webkit-scrollbar {
+  display: none;
+}
+body{
+   font-family: 'Ha' !important;
+}
+.img-box{
+   width:75vw;
+   height:300px;
+   margin-top:100px;
+   margin-bottom:20px;
+   margin-left:200px;
+   margin-right:0px;
+}
+.image-container {
+    position: relative;
+    display: inline-block;
+    margin-left:12px;
+}
+.property-details {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-bottom:100px;
+}
+
+.property-header {
+   
+    justify-content: space-between;
+    align-items: center;
+}
+
+.registration-number {
+    font-weight: bold;
+    background-color: #333;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: inline-block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left:220px;
+}
+
+.address-date {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    margin-left:220px;
+}
+.date{
+   position: absolute;
+   text-align: right;
+   right: 200px;
+}
+
+.rent{
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    margin-left:220px;
+    bottom: 10px;
+}
+.maintenance-fee {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    margin-left:220px;
+}
+
+hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left:210px;
+    margin-right:170px;
+    border-top: 1px solid #ccc;
+}
+
+.property-intro, .property-description, .location, .agency-info {
+    margin-top: 20px;
+    margin-left:220px;
+}
+
+.property-description .heading {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.property-description .content {
+    color: #666;
+    margin-right: 170px;
+}
+
+.content-pre {
+   color: #666;
+   width: 450px; /* 텍스트가 표시될 공간의 최대 너비 */
+   overflow: hidden; /* 넘친 텍스트를 감출 수 있도록 설정 */
+   white-space: nowrap; /* 텍스트가 줄바꿈되지 않도록 설정 */
+   text-overflow: ellipsis; /* 넘친 텍스트를 생략 부호(...)로 표시 */
+}
+
+.read-more {
+   position:absolute;
+   right:27px;
+    cursor: pointer;
+    color: #d698b1;
+    font-weight: bold;
+    margin-right:170px;
+}
+.contact-button-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.contact-button {
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #007bff; /* 예시로 배경색 추가 */
+}
+
+.smallMap{
+   width:88%;
+   height:200px;
+   align-self: center;
+   margin-top: 15px;
+}
+.agency-info {
+    display: flex;
+    align-items: center;
+}
+.agent-photo{
+   position: relative;
+   width: 100px; /* 지름 설정 */
+    height: 100px; /* 지름 설정 */
+    border-radius: 50%; 
+    overflow: hidden;
+    margin-right: 20px;
+}
+.agent-photo-inner{
+   width: 100%;
+    height: 100%;
+   object-fit: cover;
+}
+.agency-details {
+    flex: 1; 
+}
+
+.agency-name {
+    font-weight: bold;
+}
+
+.agent-intro {
+    color: gray;
+    font-size: 14px;
+}
+.warning{
+   color: lightgrey;
+   font-size: 14px;
+   cursor: pointer;
+   margin-top:8px;
+   margin-left:20px
+}
+.option-container{
+   margin-top:30px;
+   display: flex;
+   flex-direction: column;
+   
+}
+.option-col{
+   margin-bottom:30px;
+   vertical-align: middle;
+   
+}
+.option-img{
+   width:30px;
+   height:30px;
+   margin-right:15px;
+   vertical-align: middle
+}
+
+.option-img-siren{
+   width:30px;
+   height:30px;
+   margin-left:210px;
+   vertical-align: middle
+}
+.floor-layer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to top, rgba(255,255,255,0.3), rgba(255,255,255,1));
+    z-index: 999; /* 다른 요소 위에 표시되도록 설정 */
+    padding-bottom: 100px; 
+}
+
+.contact-button {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1000; /* 다른 요소 위에 표시되도록 설정 */
+    background-color: #d698b1; /* 배경색 지정 */
+}
+
+.icon-overlay-cancel {
+   position: absolute;
+   left:0%;
+   top: 5%;
+   cursor: pointer;
+   width: 20px; /* 너비 조정 */
+}
+.icon-overlay { 
+    position: absolute;
+    top: 10%;
+    left: 95%;
+    transform: translate(-50%, -50%);
+    /*background-color: rgba(255, 255, 255, 0.3); 반투명한 배경색 */
+    border-radius: 50%; /* 원형 아이콘일 경우 원형 모양으로 */
+    padding: 5px; /* 아이콘과 배경 사이 여백 */
+    cursor: pointer;
+}
+.icon-overlay2 { 
+    position: absolute;
+    top: 10%;
+    left: 90%;
+    transform: translate(-50%, -50%);
+    /*background-color: rgba(255, 255, 255, 0.3); 반투명한 배경색 */
+    border-radius: 50%; /* 원형 아이콘일 경우 원형 모양으로 */
+    padding: 5px; /* 아이콘과 배경 사이 여백 */
+    cursor: pointer;
+}
+.inner-icon{
+   width:30px;
+   height:30px;
+   margin-top:150px;
+}
+.icon-overlay-side0{
+	position: absolute;
+    top: 10%;
+    transform: translate(-50%, -50%);
+    padding: 5px; /* 아이콘과 배경 사이 여백 */
+    left:16%;
+    cursor: pointer;
+}
+.icon-overlay-side1{
+   position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 5px; /* 아이콘과 배경 사이 여백 */
+    left:92%;
+    cursor: pointer;
+}
+.icon-overlay-side2{
+   position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 5px; /* 아이콘과 배경 사이 여백 */
+    cursor: pointer;
+    left:20%;
+}
+
+/* 옵션 아이콘 */
+.icon-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 한 줄에 4개의 열을 생성합니다. */
+    gap: 10px; /* 이미지 사이의 간격을 조절합니다. */
+    margin-left : 80px;
+}
+
+.option-icon {
+    width: 50px; /* 이미지 너비를 조정하여 부모 요소의 너비에 맞게 만듭니다. */
+    height: auto; /* 이미지의 높이를 자동으로 조정합니다. */
+    margin: 0 auto; /* 가로로 가운데 정렬 */
+    font-size: 14px;
+}
+.option-icon-img {
+    width: 30px;
+    height: auto; 
+    display: flex;
+    margin: 0 auto; /* 가로로 가운데 정렬 */
+    margin-bottom:10px;
+}
+.option-info {
+    text-align: center; /* 텍스트를 수평으로 중앙 정렬합니다. */
+    margin: 0 auto; /* 좌우 마진을 auto로 설정하여 요소를 가로로 중앙 정렬합니다. */
+}
+</style>
+
+<!-- <script type="text/javascript">
+
+function fn_cancel(){
+   parent.document.getElementById("rightSidebarContent").style.display = "flex";
+   parent.document.getElementById("iframeContainer").style.display = "none";
+}
+
+</script> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+
+</head>
+<body>
+
+<div class="property-details">
+<!-- 네비 시작 --> 
+    <div th:replace="/common/nav :: nav"></div>
+<!-- 네비 끝 -->
+
+<!-- 이미지 컨테이너 -->
+<div class="image-container">
+    <img src="/resources/images/img_1.jpg" alt="Your Image" class="img-box">
+    
+    <div class="icon-overlay">
+        <img src="/resources/images/icon/share.png" class="inner-icon" id="share"> <!-- 공유하기 -->
+    </div>
+    <div class="icon-overlay2">
+        <img src="/resources/images/icon/heart.png" class="inner-icon" id="heart"> <!-- 하트 -->
+    </div>
+    <div class="icon-overlay-side0" id="test">
+        <img src="/resources/images/icon/goBack.png" class="inner-icon" id="goBack"> <!-- 뒤로가기 -->
+    </div>
+    <div class="icon-overlay-side1">
+        <img src="/resources/images/icon/next.png" class="inner-icon" > <!-- > -->
+    </div>
+    <div class="icon-overlay-side2">
+        <img src="/resources/images/icon/before.png" class="inner-icon"> <!-- < -->
+    </div>
+    
+    <input type="hidden" id="interestUserId" name="interestUserId" th:value="${userId}" />
+    <input type="hidden" id="interestItemNum" name="interestItemNum" th:value= "${itemNum}" />
+
+</div>
+<div class="floor-layer">
+    <div class="contact-button" >문의하기</div>
+</div>
+
+
+    <div class="property-header">
+        <div class="registration-number"><span th:text="${item.iNum}"></span></div>
+        <div class="address-date">
+            <div class="address"><span th:text="${item.itemAddress}"></span></div>
+            <div class="date"><span th:text="${item.regDate}"></span>일전</div>
+        </div>
+<!--         <div class="rent">매매 21억</div> -->
+        <div class="rent"><span th:text="${item.itemPtype}"></span> <span th:text="${item.transD}"></span>
+        <span th:if="${item.transM != null}" th:text="${item.transM}"></span></div>        
+        <div class="maintenance-fee">관리비 <span th:text="${item.itemMaintainPrice}"></span>만원</div>
+    </div>
+    <hr/>
+    <div class="property-intro">
+        <div class="one-line-intro"><span th:text="${item.itemIntro}"></span></div>
+        
+          <div class="option-container" id="shortO"><!-- 미리보기 -->
+            <div class="option-col">
+              <!-- 아이콘 -->
+              <img src="/resources/images/icon/size.png" class="option-img">
+	        	<!-- 이름 --><b>전용 <span th:text="${item.itemArea}"></span> m²</b>
+              </div>
+              <div class="option-col">
+              <!-- 아이콘 -->
+              <img src="/resources/images/icon/room.png" class="option-img">
+	        	<!-- 이름 --><b><span>아파트</span></b>
+              </div>
+              <div class="option-col">
+              <!-- 아이콘 -->
+              <img src="/resources/images/icon/building.png" class="option-img">
+	        	<!-- 이름 --><span th:text="${item.itemFloor}"></span> 층
+              </div>
+           </div>
+           
+        <!-- 원본 -->
+        <div class="option-container" id="longO" style="display:none;">
+           <div class="option-col">
+           <!-- 아이콘 -->
+           <img src="/resources/images/icon/size.png" class="option-img">
+        	<!-- 이름 --><b>전용 <span th:text="${item.itemArea}"></span> m²</b>
+           </div>
+           <div class="option-col">
+           <!-- 아이콘 -->
+           <img src="/resources/images/icon/room.png" class="option-img">
+        	<!-- 이름 --><b><span>아파트</span></b>
+           </div>
+           <div class="option-col">
+           <!-- 아이콘 -->
+           <img src="/resources/images/icon/building.png" class="option-img">
+        	<!-- 이름 --><span th:text="${item.itemFloor}"></span> 층
+           </div>
+           <div class="option-col">
+           <!-- 아이콘 -->
+       	<span th:if="${item.itemParking}!=null">
+        		<img src="/resources/images/icon/p.png" class="option-img">
+        	<!-- 이름 -->주차 <span th:if="${item.itemParking} == 'Y'">가능</span>
+        				   <span th:unless="${item.itemParking} == 'Y'">가능</span>
+        		</span>
+        	</div>
+        	<div class="option-col">
+        	<!-- 아이콘 -->
+        	<span th:if="${item.itemMoveAvbl}!=null">
+	        	<img src="/resources/images/icon/cal.png" class="option-img">
+	        	<!-- 이름 --><span th:if="${item.itemMoveAvbl} == 'Y'">즉시입주가능</span>
+	        	<span th:unless="${item.itemMoveAvbl} == 'Y'"><span th:text="${item.itemMoveDate}"></span></span>
+        	</span>
+        	</div>
+        	<div class="option-col">
+        	<!-- 아이콘 -->
+        	<img src="/resources/images/icon/direc.png" class="option-img">
+        	<!-- 이름 --><span th:text="${item.itemDirection}"></span>
+        	</div>
+        	<div class="option-col">
+        	<span th:if="${item.itemElevator}!=null">
+        	<!-- 아이콘 -->
+        	<img src="/resources/images/icon/elevator.png" class="option-img">
+        	<!-- 이름 -->엘레베이터 <span th:if="${item.itemElevator} == 'Y'">있음</span>
+        				   	  <span th:unless="${item.itemElevator} == 'Y'">없음</span>
+        	</span>
+        	</div>
+        	<div class="option-col">
+        	<span th:if="${item.itemElevator}!=null">
+        	<!-- 아이콘 -->
+        	<img src="/resources/images/icon/home.png" class="option-img">
+        	<!-- 이름 --><span th:text="${item.itemKind}"></span>
+        	</span>
+        	</div>
+        	<div class="option-col">
+        	<!-- 아이콘 -->
+        	<img src="/resources/images/icon/pet.png" class="option-img">
+        	<!-- 이름 -->반려견 동반 <span th:if="${item.itemPet} == 'Y'">가능</span>
+        				   	  <span th:unless="${item.itemPet} == 'Y'">불가능</span>
+        	</div>
+        	<div class="option-col">
+        	<!-- 아이콘 -->
+        	<span th:if="${item.itemBuildDate}!=null">
+        	<img src="/resources/images/icon/task.png" class="option-img">
+        	<!-- 이름 --><span th:text="${item.itemBuildDate}"></span>
+        	</span>
+        	</div>
+        	<div class="option-col">
+        	<!-- 아이콘 -->
+        	<img src="/resources/images/icon/house.png" class="option-img">
+        	<!-- 이름 --><span th:text="${item.itemAddress}"></span> <span th:text="${item.itemAddressDetail}"></span>
+        	</div>
+        	<div class="option-col">
+        	<!-- 아이콘 -->
+        	<img src="/resources/images/icon/checked.png" class="option-img">
+        	<!-- 이름 -->등록번호 <span th:text="${item.iNum}"></span>
+        	</div>
+        </div>   
+    </div>
+<div class="read-more" id="moreBtn2">더보기 ></div>
+    <br/>
+    <hr/>
+    <!-- 여기부터 상세설명 -->
+    <div class="property-description">
+        <div class="heading">상세 설명</div>
+        <div class="content" id="shortC">
+        <!-- 여기는 150자만 보여줍니다. 상세 설명을 잘라서 넣으세요 -->
+        <span th:if="${item.itemIntroDetail != null}" 
+        th:text="${#strings.substring(item.itemIntroDetail, 0, 10)} + '...'"></span></div>
+
+        <div class="content" id="originC" style="display:none;">
+        <!-- 여기가 상세 정보 모두가 들어가는 공간입니다. 원본 상세 설명을 그대로 넣으세요. -->
+        <span th:text="${item.itemIntroDetail}"></span></div>
+    </div>
+    <div class="read-more" id="moreBtn1">더보기 ></div>
+    <!-- 여기까지 상세설명 -->
+    <br/>
+    <hr/>
+    <div class="location">
+        <b style="margin-bottom:20px;">위치</b>
+        <br/>
+        <div th:text="${item.itemAddress}">서울시 마포구 연남동</div>
+        <div class="smallMap" id="map">지도</div>
+        <!-- 지도 키는 각자 발급받아서 사용하시면 됩니다. 아래 src 에서 appkey=(본인 카카오 개발자 자바스크립트 키) -->
+      <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=272e230f3ef7cdac70a0cdd9a4d9fd77"></script>
+         <script>
+         var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+             mapOption = { 
+                 center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+                 level: 3 // 지도의 확대 레벨
+             };
+         
+         // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+         var map = new kakao.maps.Map(mapContainer, mapOption); 
+         </script>
+    </div>
+    <hr/>
+    <div>
+       <div style="font-weight: bold; font-size: 20px; margin-bottom:30px; margin-left:220px;">옵션</div>
+       <div class="icon-container">
+          <div class="option-icon">
+             <img src="/resources/images/icon/option/air-48.png" class="option-icon-img">
+             <div class="option-info">에어컨</div>
+          </div>
+          <div class="option-icon">
+             <img src="/resources/images/icon/option/bed-48.png" class="option-icon-img">
+             <div class="option-info">침대</div>
+          </div>
+          <div class="option-icon">
+             <img src="/resources/images/icon/option/cctv-48.png" class="option-icon-img">
+             <div class="option-info">CCTV</div>
+          </div>
+          <div class="option-icon">
+             <img src="/resources/images/icon/option/closet-48.png" class="option-icon-img">
+             <div class="option-info">옷장</div>
+          </div>
+          <div class="option-icon">
+             <img src="/resources/images/icon/option/desk-48.png" class="option-icon-img">
+             <div class="option-info">책상</div>
+          </div>
+          <div class="option-icon">
+             <img src="/resources/images/icon/option/entrance-48.png" class="option-icon-img">
+             <div class="option-info">공동문</div>
+          </div>
+          <div class="option-icon">
+             <img src="/resources/images/icon/option/gasstove-48.png" class="option-icon-img">
+             <div class="option-info">가스불</div>
+          </div>
+          <div class="option-icon">
+             <img src="/resources/images/icon/option/induction-48.png" class="option-icon-img">
+             <div class="option-info">인덕션</div>
+          </div>
+          <div class="option-icon">
+             <img src="/resources/images/icon/option/intercom-48.png" class="option-icon-img">
+             <div class="option-info">인터폰</div>
+          </div>
+          <div class="option-icon">
+             <img src="/resources/images/icon/option/laundry-48.png" class="option-icon-img">
+             <div class="option-info">세탁기</div>
+          </div>
+          <div class="option-icon">
+             <img src="/resources/images/icon/option/micro-48.png" class="option-icon-img">
+             <div class="option-info">렌지</div>
+          </div>
+          <div class="option-icon">
+             <img src="/resources/images/icon/option/refrigerator-48.png" class="option-icon-img">
+             <div class="option-info">냉장고</div>
+          </div>
+          <div class="option-icon">
+             <img src="/resources/images/icon/option/sink-48.png" class="option-icon-img">
+             <div class="option-info">싱크대</div>
+          </div>
+       </div>
+    </div>
+    
+    <div class="read-more">더보기 ></div>
+   <br/>
+    <hr/>
+    <div class="agency-info">
+        <div class="agent-photo">
+         <img src="https://img.freepik.com/free-photo/young-businessman-with-a-lot-of-work_1098-3838.jpg?size=626&ext=jpg&ga=GA1.1.2008272138.1713052800&semt=ais" alt="Your Image" class="agent-photo-inner">
+        </div>
+        <div class="agency-details">
+	        <div class="agency-name">
+	        	<span th:if="${item.agentName != null}">
+	        		<span th:text="${item.agentName}"></span>
+	        	</span>
+	        	<span th:unless="${item.agentName != null}">이름 미등록 중개인</span>
+	        </div>
+	        <div class="agent-intro">
+				<span th:if="${item.agentIntro != null && #strings.length(item.agentIntro)>10}" >
+	        		<span th:text="${#strings.substring(item.agentIntro, 0, 10)} + '...'"></span>
+	        	</span>
+				<span th:unless="${item.agentIntro != null && #strings.length(item.agentIntro)>10}" >
+	        		아직 프로필을 등록하지 않은 중개인입니다.
+	        	</span>
+			</div>
+	      	<div class="read-more">더보기 ></div>
+	      	<!-- 이 더보기의 경우 누르면 다른 화면으로 보내야 하기 때문에 javaScript 없음  -->
+    	</div>
+    </div>
+    <br/>
+    <hr/>
+    
+    <hr/>
+    <div style="display: flex; vertical-align: middle;">
+    <img src="/resources/images/icon/siren.png" class="option-img-siren">
+    <div class="warning">신고하기</div>
+    </div>
+    <!-- footer -->      
+ 
+</div>
+
+<script type="text/javascript">
+
+	document.addEventListener("DOMContentLoaded", function() {
+	//뒤로 가기
+	   var goBack = document.getElementById("goBack");
+	   
+	   goBack.addEventListener("click", function() {
+	 	location.href="/user/interestItem";
+	  	/* parent.document.getElementById("rightSidebarContent").style.display = "block";
+	  	parent.document.getElementById("iframeContainer").style.display = "none"; */
+	   });
+    
+  //찜목록 등록하기
+  var heart = document.getElementById("heart");
+  heart.addEventListener("click", function() {
+
+        var itemNum = document.getElementById("interestItemNum").value; 
+              
+	        $.ajax({
+	            type: "POST",
+	            url: "/user/interestAddProc",
+	            data: {
+	                  itemNum: itemNum        
+	            },             
+	            success: function (response) {
+	            	var code = response;
+	         
+	           		if(code == "200")
+	           		{
+	           			alert("찜목록에 추가 완료하였습니다.");
+		                location.href = "/user/interestItem";  
+	           		}
+	           		else if(code == "500")
+	           		{
+	           			alert("찜목록에 이미 존재하는 데이터입니다.");		
+	           		}
+	           		else
+	           		{
+	           			alert("찜목록에 추가중 오류가 발생하였습니다.");		
+	           		    location.href = "/user/interestItem";
+	           		}
+	                
+	            },
+	            error: function () {
+	                alert("오류발생");
+	            }
+	     	});
+        
+    	}); 
+   
+   //찜목록 해제하기
+   var share = document.getElementById("share");
+   share.addEventListener("click", function() {
+
+        var itemNum = document.getElementById("interestItemNum").value; 
+           
+	        $.ajax({
+	            type: "POST",
+	            url: "/user/interestDeleteProc",
+	            data: {
+	                  itemNum: itemNum 
+	            },             
+	            success: function (response) {
+	            	var code = response;
+	         
+	           		if(code == "200")
+	           		{
+	           			alert("찜목록에서 해제 완료하였습니다.");
+		                location.href = "/user/interestItem";    
+	           		}
+	           		else if(code == "500")
+	           		{
+	           			alert("찜목록상에 존재하지 않는 데이터입니다.");			           	
+	           		}
+	           		else
+	           		{
+	           			alert("찜목록 해제 중 오류가 발생하였습니다.");		
+	           		    location.href = "/user/interestItem";
+	           		}
+	                
+	            },
+	            error: function () {
+	                alert("오류발생");
+	            }
+	     	});
+        
+    	}); 
+   
+   //옵션 더보기
+	var shortOption = document.getElementById("shortO");
+    var fullOption = document.getElementById("longO");
+    var moreBtn2 = document.getElementById("moreBtn2");
+
+    moreBtn2.addEventListener("click", function() {
+        if (fullOption.style.display === "none") {
+           fullOption.style.display = "block";
+            shortOption.style.display = "none";
+            moreBtn2.textContent = "간략히 보기";
+        } else {
+           fullOption.style.display = "none";
+            shortOption.style.display = "block";
+            moreBtn2.textContent = "더 보기";
+        }
+    });
+    
+    //상세설명 더보기
+    var shortText = document.getElementById("shortC");
+    var fullText = document.getElementById("originC");
+    var moreBtn = document.getElementById("moreBtn1");
+
+    moreBtn.addEventListener("click", function() {
+        if (fullText.style.display === "none") 
+        {
+            fullText.style.display = "block";
+            shortText.style.display = "none";
+            moreBtn.textContent = "간략히 보기";
+        } 
+        else 
+        {
+            fullText.style.display = "none";
+            shortText.style.display = "block";
+            moreBtn.textContent = "더 보기";
+        }
+    });    
+    
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <!-- 헤더 시작 -->
+    <div th:replace="/common/header :: header"></div>
+    <!-- 헤더 끝 -->
+
+    <!-- 개별 css -->
+    <style type="text/css">
+        .btn_gotop {
+            display: none;
+            position: fixed;
+            bottom: 5%;
+            right: 3%;
+            z-index: 999;
+            border: 1px solid #ccc;
+            outline: none;
+            background-color: white;
+            color: #333;
+            cursor: pointer;
+            padding: 10px 10px;
+            border-radius: 100%;
+        }
+        .focused {
+        	background-color: lightgrey;
+        	color:red;
+        	cursor:pointer;
+        
+	}
+  .autocomplete-input {
+    display: block;
+    margin: 10px auto 0;
+    padding: 10px;
+    font-size: 16px;
+    outline: none;
+    overflow-y: hide;
+    overflow-x: auto;
+}
+
+.ui-autocomplete {
+  max-height: 180px;
+  overflow-y: auto;
+  overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    border: 1px solid #ccc !important;
+    border-radius: 8px;
+    z-index: 1;
+    list-style: none;
+  	scrollbar-width: none; 
+	overflow-wrap: break-word;
+	font-family: 'Ha' !important;
+	cursor:pointer;
+}
+
+.ui-autocomplete li {
+width:100%;
+font-family: 'Ha' !important;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #000;
+	overflow-wrap: break-word;
+	overflow-y: hide;
+}
+.ui-autocomplete li :hover{
+background-color: lightgrey;
+cursor:pointer;
+}
+
+.ui-autocomplete li strong {
+    color: #0077cc;
+}
+
+.ui-helper-hidden-accessible {
+    display: none;
+}
+.ui-autocomplete li.focused {
+    background-color: lightgrey;
+}
+    </style>
+</head>
+
+<body>
+    <!-- 네비 시작 -->
+    <div th:replace="/common/nav :: nav"></div>
+    <!-- 네비 끝 -->
+
+    <!-- 본문 시작 -->
+    <div class="hero">
+        <!-- 메인 슬라이드 이미지 -->
+        <div class="hero-slide">
+            <div class="img overlay" style="background-image: url('/resources/images/viewhouse.jpg')">
+            </div>
+            <div class="img overlay" style="background-image: url('/resources/images/hero_bg_2.jpg')">
+            </div>
+            <div class="img overlay" style="background-image: url('/resources/images/hero_bg_3.jpg')">
+            </div>
+        </div>
+
+        <!-- 검색 -->
+        <div class="container">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-lg-9 text-center" style="cursor:pointer;">
+                    <h1 class="heading" data-aos="fade-up">어떤 집을 찾고 계세요?</h1>
+                    <form action="#" class="narrow-w form-search d-flex align-items-stretch mb-3 autocomplete-input" data-aos="fade-up"
+                        data-aos-delay="200">
+                        <input type="text" class="form-control px-4" placeholder="원하는 지역, 지하철역을 입력해주세요!" id="searchBox" value=""/>
+                        <input type="button" class="btn btn-primary" id="searchBtn" value="Search">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 최근 매물 -->
+    <div class="section">
+        <div class="container">
+            <div class="row mb-5 align-items-center">
+                <div class="col-lg-6">
+                    <h2 class="font-weight-bold text-primary heading">최근 매물</h2>
+                </div>
+                <div class="col-lg-6 text-lg-end">
+                    <p>
+                        <a href="/main/properties.html" target="_blank"
+                            class="btn btn-primary text-white py-3 px-4">더보기</a>
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="property-slider-wrap">
+                        <div class="property-slider">
+                            <div class="property-item">
+                                <a href="/main/property-single.html" class="img">
+                                    <img src="/resources/images/img_1.jpg" alt="Image" class="img-fluid" />
+                                </a>
+
+                                <div class="property-content">
+                                    <div class="price mb-2">
+                                        <span>$1,291,000</span>
+                                    </div>
+                                    <div>
+                                        <span class="d-block mb-2 text-black-50"> 5232
+                                            California Fake, Ave. 21BC </span> <span
+                                            class="city d-block mb-3">California,
+                                            USA</span>
+
+                                        <div class="specs d-flex mb-4">
+                                            <span class="d-block d-flex align-items-center me-3">
+                                                <span class="icon-bed me-2"></span> <span class="caption">2
+                                                    beds</span>
+                                            </span> <span class="d-block d-flex align-items-center"> <span
+                                                    class="icon-bath me-2"></span> <span class="caption">2
+                                                    baths</span>
+                                            </span>
+                                        </div>
+
+                                        <a href="/main/property-single.html" class="btn btn-primary py-2 px-3">상세보기</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- .item -->
+
+                            <div class="property-item">
+                                <a href="/main/property-single.html" class="img"> <img src="/resources/images/img_2.jpg"
+                                        alt="Image" class="img-fluid" />
+                                </a>
+
+                                <div class="property-content">
+                                    <div class="price mb-2">
+                                        <span>$1,291,000</span>
+                                    </div>
+                                    <div>
+                                        <span class="d-block mb-2 text-black-50">5232
+                                            California Fake, Ave. 21BC</span> <span
+                                            class="city d-block mb-3">California,
+                                            USA</span>
+
+                                        <div class="specs d-flex mb-4">
+                                            <span class="d-block d-flex align-items-center me-3">
+                                                <span class="icon-bed me-2"></span> <span class="caption">2
+                                                    beds</span>
+                                            </span> <span class="d-block d-flex align-items-center"> <span
+                                                    class="icon-bath me-2"></span> <span class="caption">2
+                                                    baths</span>
+                                            </span>
+                                        </div>
+
+                                        <a href="/main/property-single.html" class="btn btn-primary py-2 px-3">상세보기</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- .item -->
+
+                            <div class="property-item">
+                                <a href="/main/property-single.html" class="img"> <img src="/resources/images/img_3.jpg"
+                                        alt="Image" class="img-fluid" />
+                                </a>
+
+                                <div class="property-content">
+                                    <div class="price mb-2">
+                                        <span>$1,291,000</span>
+                                    </div>
+                                    <div>
+                                        <span class="d-block mb-2 text-black-50">5232
+                                            California Fake, Ave. 21BC</span> <span
+                                            class="city d-block mb-3">California,
+                                            USA</span>
+
+                                        <div class="specs d-flex mb-4">
+                                            <span class="d-block d-flex align-items-center me-3">
+                                                <span class="icon-bed me-2"></span> <span class="caption">2
+                                                    beds</span>
+                                            </span> <span class="d-block d-flex align-items-center"> <span
+                                                    class="icon-bath me-2"></span> <span class="caption">2
+                                                    baths</span>
+                                            </span>
+                                        </div>
+
+                                        <a href="/main/property-single.html" class="btn btn-primary py-2 px-3">상세보기</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- .item -->
+
+                            <div class="property-item">
+                                <a href="/main/property-single.html" class="img"> <img src="/resources/images/img_4.jpg"
+                                        alt="Image" class="img-fluid" />
+                                </a>
+
+                                <div class="property-content">
+                                    <div class="price mb-2">
+                                        <span>$1,291,000</span>
+                                    </div>
+                                    <div>
+                                        <span class="d-block mb-2 text-black-50">5232
+                                            California Fake, Ave. 21BC</span> <span
+                                            class="city d-block mb-3">California,
+                                            USA</span>
+
+                                        <div class="specs d-flex mb-4">
+                                            <span class="d-block d-flex align-items-center me-3">
+                                                <span class="icon-bed me-2"></span> <span class="caption">2
+                                                    beds</span>
+                                            </span> <span class="d-block d-flex align-items-center"> <span
+                                                    class="icon-bath me-2"></span> <span class="caption">2
+                                                    baths</span>
+                                            </span>
+                                        </div>
+
+                                        <a href="/main/property-single.html" class="btn btn-primary py-2 px-3">상세보기</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- item -->
+
+                            <div class="property-item">
+                                <a href="/main/property-single.html" class="img"> <img src="/resources/images/img_5.jpg"
+                                        alt="Image" class="img-fluid" />
+                                </a>
+
+                                <div class="property-content">
+                                    <div class="price mb-2">
+                                        <span>$1,291,000</span>
+                                    </div>
+                                    <div>
+                                        <span class="d-block mb-2 text-black-50">5232
+                                            California Fake, Ave. 21BC</span> <span
+                                            class="city d-block mb-3">California,
+                                            USA</span>
+
+                                        <div class="specs d-flex mb-4">
+                                            <span class="d-block d-flex align-items-center me-3">
+                                                <span class="icon-bed me-2"></span> <span class="caption">2
+                                                    beds</span>
+                                            </span> <span class="d-block d-flex align-items-center"> <span
+                                                    class="icon-bath me-2"></span> <span class="caption">2
+                                                    baths</span>
+                                            </span>
+                                        </div>
+
+                                        <a href="/main/property-single.html" class="btn btn-primary py-2 px-3">상세보기</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- .item -->
+
+                            <div class="property-item">
+                                <a href="/main/property-single.html" class="img"> <img src="/resources/images/img_6.jpg"
+                                        alt="Image" class="img-fluid" />
+                                </a>
+
+                                <div class="property-content">
+                                    <div class="price mb-2">
+                                        <span>$1,291,000</span>
+                                    </div>
+                                    <div>
+                                        <span class="d-block mb-2 text-black-50">5232
+                                            California Fake, Ave. 21BC</span> <span
+                                            class="city d-block mb-3">California,
+                                            USA</span>
+
+                                        <div class="specs d-flex mb-4">
+                                            <span class="d-block d-flex align-items-center me-3">
+                                                <span class="icon-bed me-2"></span> <span class="caption">2
+                                                    beds</span>
+                                            </span> <span class="d-block d-flex align-items-center"> <span
+                                                    class="icon-bath me-2"></span> <span class="caption">2
+                                                    baths</span>
+                                            </span>
+                                        </div>
+
+                                        <a href="/main/property-single.html" class="btn btn-primary py-2 px-3">상세보기</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- item -->
+
+                            <div class="property-item">
+                                <a href="/main/property-single.html" class="img"> <img src="/resources/images/img_7.jpg"
+                                        alt="Image" class="img-fluid" />
+                                </a>
+
+                                <div class="property-content">
+                                    <div class="price mb-2">
+                                        <span>$1,291,000</span>
+                                    </div>
+                                    <div>
+                                        <span class="d-block mb-2 text-black-50">5232
+                                            California Fake, Ave. 21BC</span> <span
+                                            class="city d-block mb-3">California,
+                                            USA</span>
+
+                                        <div class="specs d-flex mb-4">
+                                            <span class="d-block d-flex align-items-center me-3">
+                                                <span class="icon-bed me-2"></span> <span class="caption">2
+                                                    beds</span>
+                                            </span> <span class="d-block d-flex align-items-center"> <span
+                                                    class="icon-bath me-2"></span> <span class="caption">2
+                                                    baths</span>
+                                            </span>
+                                        </div>
+
+                                        <a href="/main/property-single.html" class="btn btn-primary py-2 px-3">상세보기</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- item -->
+
+                            <div class="property-item">
+                                <a href="/main/property-single.html" class="img"> <img src="/resources/images/img_8.jpg"
+                                        alt="Image" class="img-fluid" />
+                                </a>
+
+                                <div class="property-content">
+                                    <div class="price mb-2">
+                                        <span>$1,291,000</span>
+                                    </div>
+                                    <div>
+                                        <span class="d-block mb-2 text-black-50">5232
+                                            California Fake, Ave. 21BC</span> <span
+                                            class="city d-block mb-3">California,
+                                            USA</span>
+
+                                        <div class="specs d-flex mb-4">
+                                            <span class="d-block d-flex align-items-center me-3">
+                                                <span class="icon-bed me-2"></span> <span class="caption">2
+                                                    beds</span>
+                                            </span> <span class="d-block d-flex align-items-center"> <span
+                                                    class="icon-bath me-2"></span> <span class="caption">2
+                                                    baths</span>
+                                            </span>
+                                        </div>
+
+                                        <a href="/main/property-single.html" class="btn btn-primary py-2 px-3">상세보기</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- .item -->
+
+                            <div class="property-item">
+                                <a href="/main/property-single.html" class="img"> <img src="/resources/images/img_1.jpg"
+                                        alt="Image" class="img-fluid" />
+                                </a>
+
+                                <div class="property-content">
+                                    <div class="price mb-2">
+                                        <span>$1,291,000</span>
+                                    </div>
+                                    <div>
+                                        <span class="d-block mb-2 text-black-50">5232
+                                            California Fake, Ave. 21BC</span> <span
+                                            class="city d-block mb-3">California,
+                                            USA</span>
+
+                                        <div class="specs d-flex mb-4">
+                                            <span class="d-block d-flex align-items-center me-3">
+                                                <span class="icon-bed me-2"></span> <span class="caption">2
+                                                    beds</span>
+                                            </span> <span class="d-block d-flex align-items-center"> <span
+                                                    class="icon-bath me-2"></span> <span class="caption">2
+                                                    baths</span>
+                                            </span>
+                                        </div>
+
+                                        <a href="/main/property-single.html" class="btn btn-primary py-2 px-3">상세보기</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- .item -->
+                        </div>
+
+                        <div id="property-nav" class="controls" tabindex="0" aria-label="Carousel Navigation">
+                            <span class="prev" data-controls="prev" aria-controls="property" tabindex="-1">Prev</span>
+                            <span class="next" data-controls="next" aria-controls="property" tabindex="-1">Next</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 알아두면 좋은 상식 -->
+    <section class="features-1">
+        <h2 class="font-weight-bold heading text-primary mb-4 mb-md-0">
+            알아두면 좋은 부동산 상식</h2>
+        <br />
+        <div class="container">
+            <div class="row">
+                <div style="text-align: right; margin-top: -4%;">
+                    <a href="#" class="more_btn">more</a>
+                </div>
+                <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="300">
+                    <div class="box-feature">
+                        <span class="flaticon-house"></span>
+                        <h3 class="mb-3">집 구할 때 유용한 팁3</h3>
+                        <p>일정 기간 내 계약 해지 시, 미리 줬던 계약금을 돌려받을 수 있나요?에 대한
+                            답은 계약금을 입금했거나 중도금 지급방법 등의 합의가 있었을 경우,</p>
+                        <p>
+                            <a href="#" class="learn-more">Learn More</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="500">
+                    <div class="box-feature">
+                        <span class="flaticon-building"></span>
+                        <h3 class="mb-3">알아두면 돈 되는 부동산 상식</h3>
+                        <p>전세보증금 변동에 따라 계약서 작성이 달라져..
+                            전세보증금이 오르지 않았다면 새로이 계약을 체결하지 않아도 상관없다. 그러나</p>
+                        <p>
+                            <a href="#" class="learn-more">Learn More</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="400">
+                    <div class="box-feature">
+                        <span class="flaticon-house-3"></span>
+                        <h3 class="mb-3">월세 계약할 때 알아두면 좋은</h3>
+                        <p>세입자에게 유리한 계약은 1년일까, 2년일까?
+                            계약기간이 2년이라면 세입자는 계약기간동안 세를 얻은 집에서 편하게 살 수 있습니다. 그렇다면</p>
+                        <p>
+                            <a href="#" class="learn-more">Learn More</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="600">
+                    <div class="box-feature">
+                        <span class="flaticon-house-1"></span>
+                        <h3 class="mb-3">부동산 중개수수료 미리</h3>
+                        <p>부동산 중개수수료는 시에서 정한 요율이 있습니다. 따라서 부동산에서 이 요율의 범위를 넘어서
+                            수수료를 받게 되면 위법입니다. 수수료 요율은..</p>
+                        <p>
+                            <a href="#" class="learn-more">Learn More</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 공지사항 -->
+    <div class="section sec-testimonials">
+        <div class="container">
+            <div class="row mb-5 align-items-center">
+                <div class="col-md-6">
+                    <h2 class="font-weight-bold heading text-primary mb-4 mb-md-0">
+                        공지사항
+                    </h2>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div id="testimonial-nav">
+                        <span class="prev" data-controls="prev">Prev</span>
+                        <span class="next" data-controls="next">Next</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4"></div>
+            </div>
+            <div class="testimonial-slider-wrap">
+                <div class="testimonial-slider">
+                    <div th:each="notice : ${notice}" class="item">
+                        <div class="testimonial">
+                            <div class="rate">
+                                <span>[공지]</span>
+                            </div>
+                            <h3 th:text="${notice.noticeTitle}" class="h5 text-primary mb-4"></h3>
+                            <blockquote>
+                                <p th:text="${notice.noticeContent}"></p>
+                            </blockquote>
+                            <p th:text="${notice.userId}" class="text-black-50"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 이벤트 -->
+    <div class="section section-4 bg-light">
+        <div class="container">
+            <div class="row justify-content-center text-center mb-5">
+                <div class="col-lg-5">
+                    <h2 class="font-weight-bold heading text-primary mb-4">Event</h2>
+                    <p class="text-black-50">
+                        부동산관련 각종 이벤트를 확인해보실 수 있습니다.
+                    </p>
+                </div>
+            </div>
+            <div class="row justify-content-center text-center mb-5">
+                <div class="col-lg-7 mb-5 mb-lg-0 order-lg-2">
+                    <div class="img-about">
+                        <img src="/resources/images/event_1.jpg" alt="Image" class="img-fluid" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- 데이터 -->
+            <div class="row section-counter mt-5">
+                <div class="col-6 col-sm-6 col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="300">
+                    <div class="counter-wrap mb-5 mb-lg-0">
+                        <span class="number">
+                            <span class="countup text-primary">2100</span></span>
+                        <span class="caption text-black-50"># 최근 추가된 회원</span>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-6 col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="400">
+                    <div class="counter-wrap mb-5 mb-lg-0">
+                        <span class="number">
+                            <span class="countup text-primary">2181</span></span>
+                        <span class="caption text-black-50"># 최근 성사된 거래</span>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-6 col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="500">
+                    <div class="counter-wrap mb-5 mb-lg-0">
+                        <span class="number">
+                            <span class="countup text-primary">9316</span></span>
+                        <span class="caption text-black-50"># 최근 방문자</span>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-6 col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="600">
+                    <div class="counter-wrap mb-5 mb-lg-0">
+                        <span class="number">
+                            <span class="countup text-primary">7191</span></span>
+                        <span class="caption text-black-50"># 최근 중개인</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 베너 -->
+    <div class="section">
+        <div class="row justify-content-center footer-cta" data-aos="fade-up">
+            <div class="col-lg-7 mx-auto text-center">
+                <h2 class="mb-4">회원이시면 더 많은 정보를 얻을 수 있습니다.</h2>
+                <p> <!-- 회원가입 페이지로 이동 -->
+                    <a href="/join" class="btn btn-primary text-white py-3 px-4">
+                        회원가입 하시겠습니까?
+                    </a>
+                </p>
+            </div>
+            <!-- /.col-lg-7 -->
+        </div>
+        <!-- /.row -->
+    </div>
+
+    <!-- 뉴스 -->
+    <div class="section section-5 bg-light">
+        <div class="container">
+            <div class="row justify-content-center text-center mb-5">
+                <div class="col-lg-6 mb-5">
+                    <h2 class="font-weight-bold heading text-primary mb-4">
+                        뉴스
+                    </h2>
+                    <p class="text-black-50">실시간 업데이트되는 새로운 부동산 소식 궁금하지 않으신가요?</p>
+                </div>
+                <div class="row">
+                    <div th:each="news:${news}" class="col-sm-6 col-md-6 col-lg-4 mb-5 mb-lg-3">
+                        <div class="h-100 person">
+                            <div class="person-contents">
+                                <h2 class="mb-0">
+                                    <a th:href="${news.url}" target="_blank"><span th:text="${news.subject}"></span></a>
+                                </h2>
+                                <span th:text="${news.info}" class="meta d-block mb-3"></span>
+                                <a th:href="${news.url}" target="_blank">
+                                    <p th:text="${news.content}"></p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align: right; margin-top: -15%; margin-left: -10%; padding: 50px 40px;">
+                        <a href="/etc/news" class="more_btn" style="font-size: 1.5em;">
+                            + more </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 상단으로 이동하기 버튼 -->
+    <a href="#" class="btn_gotop">
+        <span class="glyphicon glyphicon-chevron-up">TOP</span>
+    </a>
+    <!-- 본문 끝 -->
+
+    <!-- 푸터 시작 -->
+    <footer th:replace="/common/footer :: footer"></footer>
+    <!-- 푸터 끝 -->
+
+    <!-- 개별 js -->
+    <script type="text/javascript">
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 300) {
+                $('.btn_gotop').show();
+            } else {
+                $('.btn_gotop').hide();
+            }
+        });
+        $('.btn_gotop').click(function () {
+            $('html, body').animate({ scrollTop: 0 }, 400);
+            return false;
+        });
+    </script>
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  <script>
+  	$(document).ready(function(){
+  		const inputSource = [];
+
+  		fetch('/resources/json/seoulStaion.json')
+  		    .then(response => response.json())
+  		    .then(data => {
+  		        data.forEach(item => {
+  		            item.label = item.지번주소; 
+  		            item.value = item.구; 
+  		            inputSource.push(item);
+  		        });
+  		    });
+  		console.log(inputSource);
+  		$('#searchBox').autocomplete({
+  	        source : inputSource,
+  	        minLength : 1,
+  	        // 자동 완성 위치 조정
+  	        position: { my: "left top+5" },
+  	        // 자동 완성 메뉴가 열렸을 때, 하이라이팅 로직
+  	        open: function () {
+  	            const inputText = $("#searchBox").val().toLowerCase();
+  	            // 각 제안 아이템에 대한 하이라이팅
+  	            $(".ui-autocomplete li").each(function () {
+  	                let suggestion = $(this).text();
+  	                const index = suggestion.toLowerCase().indexOf(inputText);
+  	                if (index !== -1) {
+  	                    // 단어의 일부를 강조하는 HTML을 사용하여 새로운 제안 생성
+  	                    const highlightedPart = `<strong>${suggestion.substr(index, inputText.length)}</strong>`;
+  	                    suggestion = suggestion.substring(0, index) + highlightedPart + suggestion.substring(index + inputText.length);
+  	                    // 새로운 제안으로 항목 내용을 업데이트
+  	                    $(this).html(suggestion);
+  	                }
+  	    		});
+  			}, //open end
+  			focus: function (event, ui) {
+  			    $(ui.item).addClass('focused');
+  			},
+  			blur: function (event, ui) {
+  			    $(ui.item).removeClass('focused');
+  			},
+  			select : function (event, ui){
+  				$("#searchBox").val(ui.item.label); 
+  				console.log(ui.item.value); //강남
+  				console.log(ui.item.label); //상세
+  				
+  				submitPage(ui.item.value);
+  				$(ui.item).hide();
+  				
+  			}
+  		});
+  		$("#searchBtn").on("click",function(){
+  			var info = $("#searchBox").val();
+  			if( info != null && info.length > 0){
+  				alert(info);
+  				submitPage($("#searchBox").val());
+  			}
+  		});
+  	});
+  	function submitPage (info){
+  		console.log("/item/one?info="+info);
+  		window.location.href="/item/one?info="+info;
+  	}
+  </script>
+</body>
+
+</html>

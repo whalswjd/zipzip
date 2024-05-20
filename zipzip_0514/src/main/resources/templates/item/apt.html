@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<link rel="stylesheet" href="/resources/css/item.css" />
+
+<head>
+  <link rel="stylesheet" href="/resources/fonts/icomoon/style.css" />
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  
+</head>
+
+<body>
+<div id="reportmodalContainer" class="hidden modalContainer">
+  <div id="reportmodalContent" class="modalContent" style="height:255px;">
+  <b style="margin-left:7%;">매물등록번호 : <span id="iNum"></span>
+  <!-- <span th:text="${item.iNum}"></span> --></b>
+    <hr>
+    <form id="reportForm" name="reportForm" class="form">
+	<div class="styled-select">
+	   <select id="classified" name="classified">
+	     <option value="S">이 페이지에 기능적인 오류가 있어요</option>
+	     <option value="I">이 매물에 문제가 있어요</option>
+	     <option value="A">이 중개인에게 문제가 있어요</option>
+	     <option value="E">기타</option>
+	   </select>
+	  <span class="fa fa-sort-desc"></span>
+	</div>
+    	<textarea name="message" id="input-message" placeholder="문제를 간단하게 설명해 주세요."></textarea>
+    	<input type="hidden" id="thisNum" name="thisNum" value="">
+    	<input type="hidden" id="userId" name="userId" value="">
+	    <div style="display: flex;">
+		    <input type="button" id="reportmodalCloseBtn" value="닫기" style="width:15%;" class="reBtn">
+	    	<input type="button" id="modalSubmit" value="제출" style="width:15%; margin-left:60%;" class="reBtn">
+	    </div>
+    </form>  
+  </div>
+</div>
+<div th:replace="/common/header :: header"></div>
+<div th:replace="/common/nav :: nav"></div>
+	<div layout:fragment="contents">
+		<div style="height: 13vh;">
+		</div>
+		<!-- 좌측 지도 -->
+		<div class="left-sidebar" style="position: relative;">
+		<div class="container">
+		  <form name="filter" class="formBox">
+
+<script src="/resources/js/kakaoMapFilter.js"></script>
+		      <ul class="menu-list">
+				<li class="menu-item">
+				  <input type="button" class="menu-button menu-button--delete" id="openFilter" value="검색조건 열기/닫기" onclick="openFilterModal()">
+				</li>
+    		</ul>
+    		<ul class="menu-list" style="display:none;" id="filterModal">
+		      <li class="menu-item"><input type="button" class="menu-button" value="평수">
+			      <ul class="menu-sub-list">
+			      <li class="menu-item" style="display: flex;">
+			      <input type="checkbox" id="chkAll" class="menu-checkbox" name="searchSize" checked>
+			      <label for="chkAll" class="menu-button">전체</label>
+			    </li>
+			   <li class="menu-item" style="display: flex;">
+			      <input type="checkbox" id="chk33" class="menu-checkbox" name="searchSize">
+			      <label for="chk33" class="menu-button">10평(33m²)</label>
+			    </li>
+			    <li class="menu-item" style="display: flex;">
+			      <input type="checkbox" id="chk66" class="menu-checkbox" name="searchSize">
+			      <label for="chk66" class="menu-button">20평(66m²)</label>
+			    </li>
+			    <li class="menu-item" style="display: flex;" >
+			      <input type="checkbox" id="chk99" class="menu-checkbox" name="searchSize">
+			      <label for="chk99" class="menu-button">30평(99m²)</label>
+			    </li>
+			    <li class="menu-item" style="display: flex;">
+			      <input type="checkbox" id="chk132" class="menu-checkbox" name="searchSize">
+			      <label for="chk132" class="menu-button" style="white-space: nowrap;">40평(132m²) 이상</label>
+			    </li>
+			      </ul>
+    		</li>
+      <li class="menu-item"><input type="button" class="menu-button menu-button--black" value="거래유형">
+         <ul class="menu-sub-list">
+		    <li class="menu-item">
+		      <label class="menu-button" for="all">
+		        <input type="radio" id="all" name="pType" value="전체" checked>
+		        &nbsp;전체
+		      </label>
+		    </li>
+		    <li class="menu-item">
+		      <label class="menu-button" for="monthly">
+		        <input type="radio" id="monthly" name="pType" value="월세">
+		        &nbsp;월세
+		      </label>
+		    </li>
+		    <li class="menu-item">
+		      <label class="menu-button" for="yearly">
+		        <input type="radio" id="yearly" name="pType" value="전세">
+		        &nbsp;전세
+		      </label>
+		    </li>
+		    <li class="menu-item">
+		      <label class="menu-button" for="selling">
+		        <input type="radio" id="selling" name="pType" value="매매">
+		        &nbsp;매매
+		      </label>
+		    </li>
+  		</ul>
+      </li>
+	  <li class="menu-item">
+	      <label class="menu-button" style="white-space: nowrap;">금액 <br/>
+	        <input type="range" min="0" max="100" value="100" step="5" style="margin-left:15px; width:150px;
+	        margin-top:-10px;">
+	          <datalist style="display: grid; grid-auto-flow: column; position:fixed;
+	           margin-top:27px; margin-left:43px; width:140px;">
+		        <option value="0">0</option>
+		        <option value="25">5천</option>
+		        <option value="50">1억</option>
+		        <option value="70">5억</option>
+		        <option value="100">10억</option>
+		    </datalist>
+	      </label>
+   	 </li>     
+    </ul>
+    <ul class="menu-list">
+      <li class="menu-item"><input type="button" class="menu-button menu-button--delete" value="검색조건 초기화" onclick="initChk()"></li>
+    </ul>
+		  </form>
+		</div>
+			<div id="map" style="width:100%;height:100%; position: absolute;"></div>
+		</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/he/1.2.0/he.js"></script>
+<script type="text/javascript"
+src="//dapi.kakao.com/v2/maps/sdk.js?appkey=272e230f3ef7cdac70a0cdd9a4d9fd77&libraries=services,clusterer,drawing&autoload=false"></script>
+<script>
+var mapContainer = document.getElementById('map'); // 지도를 표시할 div 
+	
+kakao.maps.load(function() {
+	var positions = [];		// 클러스터(매물) 찍기 좌표 배열 전역변수
+	var nowGu;
+	var show = false;
+	var markerAddArr = [];
+	var markersArr = []; 	//마커 삭제를 위한 배열
+	var markersArr2 = []; 	//리스트 검색을 위한 배열
+	let search;
+	var clear = false;
+	
+	mapOption = { 
+	        center: new kakao.maps.LatLng(37.5564857555897, 126.919446053291), 	// 지도의 중심좌표
+	        level: 5 // 지도의 확대 레벨
+	};
+	const map = new kakao.maps.Map(mapContainer, mapOption); 						// 지도를 생성합니다
+	const markerPosition  = new kakao.maps.LatLng(37.5564857555897, 126.919446053291); 
+	const geocoder = new kakao.maps.services.Geocoder();
+	const clusterer = new kakao.maps.MarkerClusterer({	//전역변수 클러스터 생성
+        map: map, 
+        averageCenter: true,
+        minLevel: 4, 
+        styles: [{
+        	minWidth: '50px',
+    	    height: '50px',
+    	    padding: '0px 0px',
+    	    color: '#fff',
+    	    fontSize: '20px',
+    	    lineHeight: '26px',
+    	    textAlign: 'center',
+    	    alignItems: 'center',
+    	    display: 'flex',
+    	    justifyContent: 'center', 
+    	    border: '2px solid #CC6699',
+    	    borderRadius: '30px',
+    	    backgroundColor: 'rgba(204, 102, 153, 0.8)',
+    	    whiteSpace: 'nowrap',
+    	    position: 'relative',
+    	    zIndex: '2'
+        }],
+        disableClickZoom: true,
+        minClusterSize: 1
+	  }); 
+	
+	pageInit();
+	kakao.maps.event.addListener(clusterer, 'clusterclick', function(cluster) {
+		//console.log('cluster click event');
+		var level = map.getLevel()-1;
+       	map.setLevel(level, {anchor: cluster.getCenter()});
+       	
+       		document.getElementById("searchBar").style.display = "block";
+           	document.getElementById("rightSidebarContent").style.display = "block";
+           	document.getElementById("iframeContainer").style.display = "none";
+       	
+       	//console.log(cluster.getMarkers());  
+   });	
+  	//지도 변경시 이벤트 등록
+	kakao.maps.event.addListener(map, 'dragend', function() {
+		var level = map.getLevel();
+		if(level>6){
+			search = "";
+			searchList(search);
+		}
+		else {
+			search = '';
+			nowMap();
+		}
+	});
+
+	kakao.maps.event.addListener(map, 'zoom_changed', function() {  
+		kakao.maps.event.preventMap();
+		var level = map.getLevel();
+		if(level>6){
+			search = "";
+			searchList(search);
+		}
+		else {
+			search = '';
+			nowMap();
+		}
+	});
+	
+	function pageInit (){ 
+		var jsonString = '[[${first}]]'; 										//처음에 모델에 넣어준 리스트임(he문법 사용)
+		var decodedString = he.decode(jsonString);
+		var first = JSON.parse(decodedString);
+		for (var i = 0; i < first.length; i++) {
+		    var position = {
+		        title: first[i].addressName,
+		        lat: first[i].lat,
+		        lng: first[i].lng
+		    };
+		    //console.log(position.title);
+		    positions.push(position);
+		}
+		makeMarkers();
+	};
+	
+	function makeMarkers () {
+	    if(clear){
+			var bounds = map.getBounds();
+			markersArr.forEach(function(marker){
+				console.log('bounds.contain(marker.getPosition()): '+bounds.contain(marker.getPosition()));
+			    if(bounds.contain(marker.getPosition())){
+			        console.log('포함됨');
+			        clusterer.removeMarker(marker);
+			    }
+			});
+			clear = false;
+	    }
+		var imageSrc = '/resources/images/map/mark.png', 
+	   	imageSize = new kakao.maps.Size(64, 64), // 마커이미지의 크기
+	   	imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션
+
+	   	// 마커의 이미지정보를 가지고 있는 마커이미지를 생성
+	 	var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+	  	//마커 배열단위로 묶어서 포지션 정해줌
+	   	var markers = positions.map(function(position) {
+		    var marker = new kakao.maps.Marker({
+		        position: new kakao.maps.LatLng(position.lat, position.lng),
+		        clickable: true,
+		        image: markerImage
+		    });
+		    //console.log(marker.getPosition());
+		    markersArr.push(marker);
+		    markerAddArr.push(position.title);	//주소
+		    
+		    return marker;
+		    //marker.setMap(null);
+		   
+
+		});
+	   	
+	   	console.log('makeMarkers Start...');
+	   	clusterer.addMarkers(markers);
+		positions = [];
+	};
+	var proj = map.getProjection();
+	var bounds = map.getBounds();
+
+	function nowMap (){
+		var rt = proj.coordsFromContainerPoint(new kakao.maps.Point(1186, 125));
+		var rb = proj.coordsFromContainerPoint(new kakao.maps.Point(1183, 784));
+		var lt = proj.coordsFromContainerPoint(new kakao.maps.Point(316, 271));
+		var lb = proj.coordsFromContainerPoint(new kakao.maps.Point(283, 846));
+		var c=  proj.coordsFromContainerPoint(new kakao.maps.Point(824, 530));
+		var code = [c,rt,rb,lt,lb];
+		//console.log(code);
+		searchAddrFromCoords(code);
+	}
+	function searchCoordFromAdd(add){
+		geocoder.addressSearch(add, function(result, status) {
+		    // 정상적으로 검색이 완료됐으면 
+		     if (status === kakao.maps.services.Status.OK) {
+		    	console.log("searchCoordFromAdd");
+		        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+		        console.log(coords);
+		        return map.panTo(coords);
+		     }
+		     else{
+		    	 return false;
+		     }
+		});
+	};
+	//지도 부드럽게 이동 함수
+	/* function panTo(coords) {
+		console.log("panTo함수, 매개변수 : "+coords);
+	    var moveLatLon = coords;
+	    map.panTo(moveLatLon);            
+	}; */
+
+	function searchAddrFromCoords(coords) {
+	    var total = 5;
+	    var cnt = 0;
+	    var info = [];
+	    //console.log(info);
+
+	    coords.forEach(function (coord) {
+	        geocoder.coord2RegionCode(coord.getLng(), coord.getLat(), function (result, status) {
+	            if (status === kakao.maps.services.Status.OK) {
+	                for (var i = 0; i < result.length; i++) {
+	                    if (result[i].region_type === 'H') {
+	                    	//console.log(result[i].region_2depth_name);
+	                    	info[i+cnt] = result[i].region_2depth_name; // 검색 결과를 배열에 추가합니다.
+	                        //console.log(info[i+cnt]);
+	                        cnt++;
+	                    }
+	                }
+	            }
+
+	            if (total === cnt) {
+	                //console.log(info);
+	                for(var i = 0; i<info.length;i++){
+	                	if(i != 0){
+	                		search += ',';
+	                	}
+	                	search += info[i];
+	                }
+	                search = info.join(',');
+	                search = search.replace(/^,/, '');
+	                //doSomething(); // 다음 로직으로 넘어갑니다.
+	                searchList(search);
+	            }
+	        });
+	    }); //forEach end
+	}; //function end 
+	
+
+	
+
+function searchList (search){  
+	//console.log(search);
+	$.ajax({
+        url: '/cluster',
+        type: 'POST',
+        data:{
+			info: search,
+			type: "A"
+        },
+        datatype : 'text',
+        success: function(data) {
+            if (data) {
+                //console.log('검색완료');
+              	
+            } else {
+                alert("전송된 값 없음");
+            }
+        },
+        error: function() {
+            alert("에러 발생");
+        }
+    }).done(function (data){
+    	
+    	var json = JSON.parse(data);
+    	
+    	for (var i = 0; i < json.length; i++) {
+    	    var position = {
+    	        title: json[i].addressName,
+    	        lat: json[i].lat,
+    	        lng: json[i].lng
+    	    };
+    	    positions.push(position);
+    	} //for
+		clear = true;
+    	makeMarkers();
+  		status = true;
+  	
+  	//리스트 ajax
+  	console.log("search : "+search);
+  	$.ajax({
+	        url: '/reList',
+	        type: 'POST',
+	        data:{
+				info: search,
+				type: "A"
+	        },
+	        datatype : 'text',
+	        success: function(data) {
+	            if (data) {
+	                //console.log('검색완료');
+	            } else {
+	                alert("전송된 값 없음");
+	            }
+	        },
+	        error: function() {
+	            alert("에러 발생");
+	        }
+	    }).done(function (data){
+	    	applyFiltering();
+	    	$("#changable").replaceWith(data);
+	    	$(".oneItem").on("click", function() {
+	            var add = $(this).find("#add").text();
+	            console.log(add);
+	            searchCoordFromAdd(add);
+	        });
+	    });//ajax 2 done
+    });//ajax 1 done 
+		    
+			
+		};//searchList
+		
+		
+	//검색(자동완성)
+	const inputSource = [];
+
+	fetch('/resources/json/seoulStaion.json')
+	    .then(response => response.json())
+	    .then(data => {
+	        data.forEach(item => {
+	            item.label = item.지번주소; 
+	            item.value = item.구; 
+	            inputSource.push(item);
+	        });
+	    });
+	//console.log(inputSource);
+	$('#searchBox').autocomplete({
+        source : inputSource,
+        minLength : 1,
+        // 자동 완성 위치 조정
+        position: { my: "left top+5" },
+        // 자동 완성 메뉴가 열렸을 때, 하이라이팅 로직
+        open: function () {
+            const inputText = $("#searchBox").val().toLowerCase();
+            // 각 제안 아이템에 대한 하이라이팅
+            $(".ui-autocomplete li").each(function () {
+                let suggestion = $(this).text();
+                const index = suggestion.toLowerCase().indexOf(inputText);
+                if (index !== -1) {
+                    // 단어의 일부를 강조하는 HTML을 사용하여 새로운 제안 생성
+                    const highlightedPart = `<strong>${suggestion.substr(index, inputText.length)}</strong>`;
+                    suggestion = suggestion.substring(0, index) + highlightedPart + suggestion.substring(index + inputText.length);
+                    // 새로운 제안으로 항목 내용을 업데이트
+                    $(this).html(suggestion);
+                }
+    		});
+		}, //open end
+		focus: function (event, ui) {
+		    $(ui.item).addClass('focused');
+		},
+		blur: function (event, ui) {
+		    $(ui.item).removeClass('focused');
+		},
+		select : function (event, ui){
+			//console.log(ui.item.label);			
+			$("#searchBox").val(ui.item.label); 	//검색창
+			searchCoordFromAdd(ui.item.label); 		//지도이동
+			searchList(ui.item.value);
+			$(ui.item).hide();
+		}
+	});
+	$(document).ready(function(){
+		$(".oneItem").on("click",function(){
+			var add = $(this).find("#add").text();
+			console.log(add);
+			searchCoordFromAdd(add);
+		});
+	});	//
+}); //kakao.load end 
+
+</script>		
+
+		<!-- 우측 사이드바 -->
+		<div class="right-sidebar">
+			<div class="search" id="searchBar" style="z-index:1;, cursor:pointer;">
+				<input type="text" list="list" class="search-input" placeholder="지역, 지하철역 검색" id="searchBox">
+			</div>
+			<!-- 아이프레임 -->
+			<div class="iframe-container" id="iframeContainer">
+				<iframe src="" data-src="" id="propertyIframe" style="filter: chroma(color=#999999)"></iframe>
+			</div>
+
+			<div class="right-sidebar-content" id="rightSidebarContent">
+				<!-- 여기에 우측 사이드바 내용을 추가하세요 -->
+					
+				<!-- 매물 리스트 시작-->
+				<div class="properties-box-column" id="changable">
+					<div>
+						<!-- 매물 1개 시작 'openIframe(\'' + ${item.itemNum} + '\')' -->
+						<div class="properties-box" th:each="item : ${list}" 
+						th:itemNum="${item.itemNum}"
+						th:itemItype="${item.itemItype}"
+						th:add = "${item.itemAddress}"
+						th:onclick="fn_showIframe(this.getAttribute('itemNum'),this.getAttribute('itemItype')); ">
+							<div class="properties-box-padding oneItem" id="oneItem">
+								<div>
+								<img th:src="@{'/resources/upload/item/' + ${item.fileName}}" alt="Image" class="properties-box-img" />
+								</div>
+								<div class="properties-box-content">
+									<div class="item-name">
+										<span th:text="${item.itemName}"></span>
+									</div>
+									<div class="item-price">
+										<span>   
+										<span th:text="${item.itemPtype}" class="PayType" id="PayType"></span><span class="transD" th:text="' '+ ${item.transD}" id="transD"></span><span th:if="${item.itemPtype == '월세'}" th:text="' / '+ ${item.transM}"></span>
+										</span>
+									</div>
+									<div class="item-info">
+										<span class="itemSize" id="itemSize" th:text="${item.itemArea}"></span>m²ㆍ
+										<span th:text="${item.itemFloor}"></span>층 <br />
+										<span id="add" th:text="${item.itemAddress}"></span>
+									</div>
+									<div class="item-intro">
+										<span th:text="${item.itemIntro}"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<hr>
+						<!-- 매물 1개 끝 -->
+
+					</div><!-- th:each문 끝 -->
+
+				</div><!--  -->
+				<!-- 매물 리스트 끝 -->
+
+			</div>
+		</div>
+	</div>		
+
+
+</body>
+</html>

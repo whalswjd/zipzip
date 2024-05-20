@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- 헤더 시작 -->
+    <div th:replace="/common/header :: header"></div>
+    <!-- 헤더 끝 -->
+
+    <!-- 개별 css -->
+    <style type="text/css">
+
+    </style>
+</head>
+
+<body>
+    <!-- 네비 시작 -->
+    <div th:replace="/common/nav :: nav"></div>
+    <!-- 네비 끝 -->
+
+    <!-- 본문 시작 -->
+    <div style="height: 13vh;"></div>
+    <section class="vh-100">
+        <div class="container p-5 h-100">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">First</th>
+                        <th scope="col">Last</th>
+                        <th scope="col">Handle</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Jacob</td>
+                        <td>Thornton</td>
+                        <td>@fat</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td colspan="2">Larry the Bird</td>
+                        <td>@twitter</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <!-- 본문 끝 -->
+
+    <!-- 푸터 시작 -->
+    <footer th:replace="/common/footer :: footer"></footer>
+    <!-- 푸터 끝 -->
+
+    <!-- 개별 js -->
+    <script type="text/javascript">
+
+    </script>
+</body>
+
+</html>

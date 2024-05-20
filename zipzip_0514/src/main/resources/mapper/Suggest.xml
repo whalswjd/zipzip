@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Suggest">
+
+		<insert id="insert" parameterType="com.example.demo.dto.Suggest" useGeneratedKeys="true" keyProperty="suggestNum">
+			<selectKey resultType="long" keyProperty="suggestNum" order="BEFORE">
+				SELECT ZIP_SUGGEST_SEQ.NEXTVAL FROM DUAL
+			</selectKey>
+			
+			INSERT INTO ZIP_SUGGEST (
+			    SUGGEST_NUM,
+			    USER_ID,
+			    SUGGEST_TITLE,
+			    SUGGEST_CONTENT,
+			    SUGGEST_HIT,
+			    REG_DATE
+			) VALUES (
+			    #{suggestNum},
+			    #{userId},
+			    #{suggestTitle},
+			    #{suggestContent},
+			    0,
+			    SYSDATE
+			)
+			
+		</insert>
+
+		<select id="selectAll" resultType="com.example.demo.dto.Suggest">
+			SELECT SUGGEST_NUM,
+			    USER_ID,
+			    SUGGEST_TITLE,
+			    SUGGEST_CONTENT,
+			    SUGGEST_HIT,
+			    TO_CHAR(REG_DATE, 'YYYY-MM-DD') REG_DATE
+			FROM ZIP_SUGGEST
+			ORDER BY SUGGEST_NUM DESC
+		</select>
+		
+		
+</mapper>

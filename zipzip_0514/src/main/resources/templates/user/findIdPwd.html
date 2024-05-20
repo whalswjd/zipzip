@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- 헤더 시작 -->
+    <div th:replace="/common/header :: header"></div>
+    <!-- 헤더 끝 -->
+
+    <!-- 개별 css -->
+    <style type="text/css">
+        #form2 {
+            display: none;
+        }
+        
+        #background_modal {
+        	display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 네비 시작 -->
+    <div th:replace="/common/nav :: nav"></div>
+    <!-- 네비 끝 -->
+
+    <!-- 본문 시작 -->
+    <section class="vh-100">
+        <div class="container w-50 p-5 h-100">
+            <div class="row d-flex align-items-center justify-content-center h-100">
+                <div class="col-md-7 col-lg-5 col-xl-5">
+
+                    <p class="text-center h2 fw-bold mb-5 mx-md-3">아이디/비밀번호 찾기</p>
+
+                    <div class="d-flex column align-items-center justify-content-center mb-3">
+                        <div class="form-check me-3">
+                            <input class="form-check-input" type="radio" name="findIdPwd" id="findId" value="id" checked>
+                            <label class="form-check-label" for="findId">
+                                아이디 찾기
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="findIdPwd" id="findPwd" value="pwd">
+                            <label class="form-check-label" for="findPwd">
+                                비밀번호 찾기
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="form1">
+                        <form action="" method="POST">
+                            <div class="form-floating mb-4">
+                                <input type="text" class="form-control" id="userName" name="userName" placeholder="">
+                                <label for="userName">이름</label>
+                            </div>
+                            <div class="form-floating mb-4">
+                                <input type="text" class="form-control" id="userPhone" name="userPhone"
+                                    placeholder="">
+                                <label for="userPhone">전화번호</label>
+                            </div>
+                            <button type="button" class="btn btn-primary w-100 py-2 mb-3" id="search">확인</button>
+                            <button type="button" class="btn btn-primary w-100 py-2 mb-3"
+                                onclick="history.back()">취소</button>
+                        </form>
+                    </div>
+
+                    <div id="form2">
+                        <form action="" method="POST">
+                            <div class="form-floating mb-4">
+                                <input type="text" class="form-control" id="userId" name="userId" placeholder="">
+                                <label for="userId">아이디</label>
+                            </div>
+                            <div class="form-floating mb-4">
+                                <input type="text" class="form-control" id="userEmail" name="userEmail"
+                                    placeholder="">
+                                <label for="userEmail">이메일</label>
+                            </div>
+                            <button type="button" class="btn btn-primary w-100 py-2 mb-3">확인</button>
+                            <button type="button" class="btn btn-primary w-100 py-2 mb-3"
+                                onclick="history.back()">취소</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 모달 -->
+    <div id="background_modal" class="background_modal">
+		<div class="modal_contents">
+			<h4>
+				<b>손님 아이디는?</b><span class="close">&times;</span>
+			</h4><br>
+				<h2 id="id_value"></h2>
+			<br>
+			<button type="button" id="pwSearch_btn" class="btn peach-gradient btn-rounded waves-effect">
+			<i class="fa fa-envelope"></i>비밀번호 찾기</button>
+		</div>
+	</div>
+    <!-- 본문 끝 -->
+
+    <!-- 푸터 시작 -->
+    <footer th:replace="/common/footer :: footer"></footer>
+    <!-- 푸터 끝 -->
+
+    <!-- 개별 js -->
+    <script type="text/javascript">
+        $("input[type=radio][name=findIdPwd]").on("click", function () {
+            var chk = $("input[type=radio][name=findIdPwd]:checked").val();
+
+            if (chk == "id") {
+                //alert("id");
+                $("#form1").css("display", "block");
+                $("#form2").css("display", "none");
+            }
+
+            else if (chk == "pwd") {
+                //alert("pwd");
+                $("#form1").css("display", "none");
+                $("#form2").css("display", "block");
+            }
+        });
+        
+		// 1. 모달창 히든 불러오기
+		$("#search").click(function() {
+			$("#background_modal").show();
+		});
+		// 2. 모달창 닫기 버튼
+		$(".close").on("click", function() {
+			$("#background_modal").hide();
+		});
+		// 3. 모달창 위도우 클릭 시 닫기
+		$(window).on("click", function() {
+			if (event.target == $("#background_modal").get(0)) {
+	            $("#background_modal").hide();
+	         }
+		});
+
+    </script>
+</body>
+
+</html>

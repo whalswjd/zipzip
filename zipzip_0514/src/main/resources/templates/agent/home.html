@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<!-- 헤더 시작 -->
+	<div th:replace="/common/header :: header"></div>
+	<!-- 헤더 끝 -->
+
+	<!-- 개별 css -->
+	<style type="text/css">
+
+	</style>
+</head>
+
+<body>
+	<!-- 네비 시작 -->
+	<div th:replace="/common/nav :: nav"></div>
+	<!-- 네비 끝 -->
+
+	<!-- 본문 시작 -->
+	<div style="height: 13vh;"></div>
+	<section class="vh-100">
+		<div class="container p-5 h-100">
+			<div>
+				<h1>중개사무소 가입</h1>
+				<p>집집의 파트너가 되어보세요</p>
+				<button type="button" id="btnJoin" class="btn btn-primary py-2">회원가입</button>
+				<button type="button" id="btnLogin" class="btn btn-primary py-2">로그인</button>
+				<button type="button" id="btn" class="btn btn-primary py-2">결제</button>
+			</div>
+		</div>
+	</section>
+	<!-- 본문 끝 -->
+
+	<!-- 푸터 시작 -->
+	<footer th:replace="/common/footer :: footer"></footer>
+	<!-- 푸터 끝 -->
+
+	<!-- 개별 js -->
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$("#btnJoin").on("click", function () {
+				location.href = '/agent/join';
+			});
+
+			$("#btnLogin").on("click", function () {
+				location.href = '/agent/login';
+			});
+		});
+	</script>
+</body>
+
+</html>

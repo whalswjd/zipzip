@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+ <mapper namespace="Manager">
+ 
+	<select id="findById" parameterType="String" resultType="com.example.demo.dto.Manager">
+		SELECT MANAGER_ID,
+		    MANAGER_PWD,
+		    MANAGER_NAME,
+		    ROLE
+		FROM ZIP_MANAGER
+		WHERE MANAGER_ID = #{managerId}
+	</select>
+	
+	<select id="selectReportList" parameterType="com.example.demo.dto.Report" resultType="com.example.demo.dto.Report">
+SELECT REPORT_NUM, USER_ID, REPORT_TYPE, REG_DATE, STATUS, REPORT_CONTENT, ITEM_NUM
+FROM (
+SELECT ROWNUM RN, B.* FROM (
+SELECT  NVL(REPORT_NUM,0) REPORT_NUM,
+        NVL(USER_ID,'') USER_ID,
+        NVL(REPORT_TYPE,'E') REPORT_TYPE,
+        NVL(REG_DATE,'') REG_DATE,
+        NVL(STATUS,'P') STATUS,
+        NVL(REPORT_CONTENT,'') REPORT_CONTENT,
+        NVL(ITEM_NUM,0) ITEM_NUM
+FROM ZIP_REPORT 
+WHERE 1=1
+<if test="(userId != null and userId != '')"	>
+		AND  USER_ID like '%'|| #{userId} || '%'
+</if>
+<if test="(status!= null and status != '') "	>
+ 		AND STATUS like '%' || #{status} || '%'
+</if>
+<if test="(reportType != null and reportType != '')"	>
+  		AND REPORT_TYPE = #{reportType}
+
+</if>
+ORDER BY REG_DATE DESC) B)
+WHERE 1=1
+AND RN <![CDATA[>=]]> #{startRnum}
+AND RN <![CDATA[<=]]> #{endRnum}
+	</select>
+	
+	<select id="reportTotalCnt" parameterType="com.example.demo.dto.Report" resultType="long">
+	SELECT COUNT(REPORT_NUM) AS TOTAL_CNT
+	  FROM ZIP_REPORT
+	 WHERE 1=1
+<if test="(userId != null and userId != '')"	>
+		AND  USER_ID like '%'|| #{userId} || '%'
+</if>
+<if test="(status!= null and status != '') "	>
+ 		AND STATUS like '%' || #{status} || '%'
+</if>
+<if test="(reportType != null and reportType != '')"	>
+  		AND REPORT_TYPE = #{reportType}
+</if>
+	</select>
+	<update id="updateReportStatus" parameterType="com.example.demo.dto.Report">
+	 UPDATE ZIP_REPORT
+    SET STATUS = #{status}
+  WHERE REPORT_NUM = #{reportNum}
+	</update>
+	
+	<select id="selectUserList" parameterType="com.example.demo.dto.Search" resultType="com.example.demo.dto.User">
+	  SELECT USER_ID, USER_NAME, USER_PHONE, USER_EMAIL, STATUS, REG_DATE, EMAIL_AUTH
+FROM (
+SELECT ROWNUM RN, B.* FROM (
+SELECT  NVL(USER_ID,0) USER_ID,
+        NVL(USER_NAME,'') USER_NAME,
+        NVL(USER_PHONE,'E') USER_PHONE,
+        NVL(USER_EMAIL,'') USER_EMAIL,
+        NVL(STATUS,'P') STATUS,
+        NVL(REG_DATE,'') REG_DATE,
+        NVL(EMAIL_AUTH,0) EMAIL_AUTH
+FROM ZIP_USER 
+WHERE 1=1
+<if test="searchType != null and searchType != '' and searchValue != null and searchValue!=''">
+	<choose>
+		<when test='searchType == "1"'>
+		AND USER_ID LIKE '%'||#{searchValue}||'%'
+		</when>
+		<when test='searchType == "2"'>
+		AND USER_NAME LIKE '%'||#{searchValue}||'%'
+		</when>
+		<when test='searchType == "3"'>
+		AND STATUS LIKE '%'||#{searchValue}||'%'
+		</when>
+  	</choose>
+</if>
+ORDER BY REG_DATE DESC) B)
+WHERE 1=1
+AND RN <![CDATA[>=]]> #{startRnum}
+AND RN <![CDATA[<=]]> #{endRnum}
+	</select>
+	
+	<select id="selectUserTotal" parameterType="com.example.demo.dto.Search" resultType="long">
+	SELECT COUNT(USER_ID) AS TOTAL_CNT
+  FROM ZIP_USER
+ WHERE 1=1
+<if test="searchType != null and searchType != '' and searchValue != null and searchValue != ''">
+    <choose>
+        <when test="searchType == '1'">
+            AND USER_ID LIKE '%'||#{searchValue}||'%'
+        </when>
+        <when test="searchType == '2'">
+            AND user LIKE '%'||#{searchValue}||'%'
+        </when>
+        <when test="searchType == '3'">
+            AND STATUS LIKE '%'||#{searchValue}||'%'
+        </when>
+    </choose>
+</if>
+	</select>
+	<update id="updateUserStatus" parameterType="com.example.demo.dto.User">
+	 UPDATE ZIP_USER
+    	SET STATUS = #{status},
+    		EMAIL_AUTH = #{emailAuth}
+  	  WHERE USER_ID = #{userId}
+	</update>
+	
+	<select id="userChange" resultType="com.example.demo.dto.Graph">
+	SELECT REG_DATE, TOTAL_CNT
+	  FROM (SELECT ROWNUM RN, A.*
+	          FROM (SELECT TO_CHAR(REG_DATE, 'yyyy-mm') REG_DATE, COUNT(USER_ID) TOTAL_CNT
+	                FROM ZIP_USER
+	                WHERE 1=1
+	                GROUP BY TO_CHAR(REG_DATE, 'yyyy-mm')
+	                ORDER BY REG_DATE ASC
+	            ) A
+	        WHERE ROWNUM <![CDATA[<]]> 5)
+	</select>
+	
+</mapper>

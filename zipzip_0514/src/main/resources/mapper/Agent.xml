@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+ <mapper namespace="Agent">
+	
+	<!-- 회원가입 -->
+	<insert id="insert" parameterType="com.example.demo.dto.Agent">
+		INSERT INTO ZIP_AGENT (
+			AGENT_ID,
+			AGENT_PWD,
+			AGENT_NAME,
+			AGENT_OFFICE_NAME,
+			AGNET_PHONE,
+			AGENT_EMAIL,
+			AGENT_INTRO,
+			AGENT_ADDRESS,
+			AGENT_ADDRESS_DETAIL,
+			AGENT_RIGHT,
+			ROLE,
+			STATUS,
+			REG_DATE
+		) VALUES (
+		    #{agentId},
+		    #{agentPwd},
+		    #{agentName},
+		    #{agentOfficeName},
+		    #{agnetPhone},
+		    #{agentEmail},
+		    #{agentIntro},
+		    #{agentAddress},
+		    #{agentAddressDetail},
+		    #{agentRight},
+		    #{role},
+		    #{status},
+		    SYSDATE
+		)
+	</insert>
+	
+	<!-- 로그인 -->
+	<select id="findById" parameterType="String" resultType="com.example.demo.dto.Agent">
+		SELECT AGENT_ID,
+		    AGENT_PWD,
+		    AGENT_NAME,
+		    AGENT_OFFICE_NAME,
+		    AGNET_PHONE,
+		    AGENT_EMAIL,
+		    AGENT_INTRO,
+		    AGENT_ADDRESS,
+		    AGENT_ADDRESS_DETAIL,
+		    AGENT_RIGHT,
+		    ROLE,
+		    STATUS,
+		    REG_DATE
+		FROM ZIP_AGENT
+		WHERE AGENT_ID = #{agentId}
+	</select>
+	
+	<!-- 중개사 select -->
+	<select id="agentSelect" parameterType="String" resultType="com.example.demo.dto.Agent">
+		SELECT NVL(AGENT_ID, '') AS AGENT_ID,
+		       NVL(AGENT_PWD, '') AS AGENT_PWD,
+		       NVL(AGENT_NAME, '') AS AGENT_NAME,
+		       NVL(AGENT_OFFICE_NAME, '') AS AGENT_OFFICE_NAME,
+		       NVL(AGNET_PHONE, '') AS AGNET_PHONE,
+		       NVL(AGENT_EMAIL, '') AS AGENT_EMAIL,
+		       NVL(AGENT_INTRO, '') AS AGENT_INTRO,
+		       NVL(AGENT_ADDRESS, '') AS AGENT_ADDRESS,
+		       NVL(AGENT_ADDRESS_DETAIL, '') AS AGENT_ADDRESS_DETAIL,
+		       NVL(AGENT_RIGHT, '') AS AGENT_RIGHT,
+		       NVL(ROLE, '') AS ROLE,
+		       NVL(STATUS, '') AS STATUS,
+		       NVL(TO_CHAR(REG_DATE, 'yyyy.mm.dd hh24:mi:ss'), '') AS REG_DATE
+		  FROM ZIP_AGENT
+		 WHERE AGENT_ID = #{value}
+	</select>
+
+ </mapper>

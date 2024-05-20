@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<!-- 헤더 시작 -->
+	<div th:replace="/common/header :: header"></div>
+	<!-- 헤더 끝 -->
+
+	<!-- 개별 css -->
+	<style type="text/css">
+.task-box {
+  position: relative;
+  border-radius: 12px;
+  width: 100%;
+  margin: 20px 0;
+  padding: 16px;
+  cursor: pointer;
+  background-color: #fcbdbb;
+  box-shadow: 2px 2px 4px 0px #ebebeb;
+}
+.task-box:hover {
+  transform: scale(1.02);
+}
+.task-name {
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.6;
+}
+.more-button {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background-color: #8e92a4;
+  box-shadow: 0 -4px 0 0 #8e92a4, 0 4px 0 0 #8e92a4;
+  opacity: 0.4;
+  right: 20px;
+  top: 30px;
+  cursor: pointer;
+}
+	</style>
+</head>
+
+<body>
+	<!-- 네비 시작 -->
+	<div th:replace="/common/nav :: nav"></div>
+	<!-- 네비 끝 -->
+
+	<!-- 본문 시작 -->
+	<div style="height: 13vh;"></div>
+	<section class="vh-100">
+		<div class="container p-5 h-100">
+			<div>
+				<h1>관리자 페이지</h1>
+			</div>
+			<div class="task-box" id="manageReport">
+	    		<div class="task-name">신고 관리</div>
+        		<div class="more-button"></div>
+			</div>
+			<div class="task-box" id="manageReport" style="background-color: #ccd1fc;">
+	    		<div class="task-name">중개인 관리</div>
+        		<div class="more-button"></div>
+			</div>
+			<div class="task-box" id="manageUser" style="background-color: #faffd4;">
+	    		<div class="task-name">회원 관리</div>
+        		<div class="more-button"></div>
+			</div>
+		</div>
+
+	</section>
+
+	<!-- 본문 끝 -->
+
+	<!-- 푸터 시작 -->
+	<footer th:replace="/common/footer :: footer"></footer>
+	<!-- 푸터 끝 -->
+
+	<!-- 개별 js -->
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$("#manageReport").on("click",function(){
+				window.location.href = "/manager/report";
+			});
+			$("#manageUser").on("click",function(){
+				window.location.href = "/manager/user";
+			});
+		});
+	</script>
+</body>
+
+</html>

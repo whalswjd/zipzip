@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.repository.ReviewBoardRepository">
+	<!-- 리뷰게시판 리스트 -->
+	<select id="reviewList" resultType="com.example.demo.dto.AgentReview">
+		SELECT REVIEW_NUM,
+	           USER_ID,
+	           AGENT_ID,
+	           REVIEW_CONTENT,
+	           REVIEW_SCORE,
+	           REG_DATE,
+	           AGENT_NAME,
+	           AGENT_OFFICE_NAME
+		  FROM (SELECT ROWNUM AS RNUM,
+		               REVIEW_NUM,
+		               USER_ID,
+		               AGENT_ID,
+		               REVIEW_CONTENT,
+		               REVIEW_SCORE,
+		               REG_DATE,
+		               AGENT_NAME,
+		               AGENT_OFFICE_NAME
+		          FROM (SELECT A.REVIEW_NUM AS REVIEW_NUM,
+		                       NVL(A.USER_ID, ' ') AS USER_ID,
+		                       NVL(B.AGENT_ID, ' ') AS AGENT_ID,
+		                       NVL(A.REVIEW_CONTENT, ' ') AS REVIEW_CONTENT,
+		                       NVL(A.REVIEW_SCORE, 0) AS REVIEW_SCORE,
+		                       NVL(TO_CHAR(A.REG_DATE, 'YYYY.MM.DD'), ' ') AS REG_DATE,
+		                       NVL(B.AGENT_NAME, ' ') AS AGENT_NAME,
+		                       NVL(B.AGENT_OFFICE_NAME, ' ') AS AGENT_OFFICE_NAME
+	                      FROM ZIP_AGENT_REVIEW A, ZIP_AGENT B
+	                     WHERE 1 = 1
+	                       AND A.AGENT_ID = B.AGENT_ID       
+             <if test='reviewContent != null and reviewContent != ""'>
+		            AND A.REVIEW_CONTENT LIKE '%' || #{reviewContent} || '%'
+             </if>   
+             <if test='agentName != null and agentName != ""'> 	                      
+		            AND B.AGENT_NAME LIKE '%' || #{agentName} || '%'  
+			 </if>   
+		          ORDER BY A.REG_DATE DESC))
+                
+		WHERE RNUM <![CDATA[>=]]> #{startRow}
+		  AND RNUM <![CDATA[<=]]> #{endRow}
+	</select>
+	
+	<!-- 전체 건 수 조회 -->
+	<select id="reviewListCount" parameterType="com.example.demo.dto.AgentReview" resultType="int">
+		SELECT COUNT(REVIEW_NUM) AS CNT
+  		  FROM ZIP_AGENT_REVIEW A, ZIP_AGENT B
+  		 WHERE A.AGENT_ID = B.AGENT_ID
+		   AND A.REVIEW_CONTENT LIKE '%' || #{reviewContent} || '%'
+		   AND B.AGENT_NAME LIKE '%' || #{agentName} || '%'
+	</select>
+	
+	<!-- 리뷰 등록 -->
+	<insert id="reviewInsert" parameterType="com.example.demo.dto.AgentReview">
+		<!-- boardNum 선행처리기 -->
+		<selectKey resultType="long" keyProperty="reviewNum" order="BEFORE">
+			SELECT B_AGENT_REVIEW_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		
+		INSERT INTO ZIP_AGENT_REVIEW (
+			        REVIEW_NUM,
+			        USER_ID,
+			        AGENT_ID,
+			        REVIEW_CONTENT,
+			        REVIEW_SCORE,
+			        REG_DATE
+			    ) VALUES (
+			        #{reviewNum},
+			        #{userId},
+			        #{agentId},
+			        #{reviewContent},
+			        #{reviewScore},
+			        SYSDATE
+			    )
+	</insert>
+	
+	<!-- 리뷰 1건 삭제 -->
+	<delete id="reviewDelete" parameterType="long">
+		DELETE FROM ZIP_AGENT_REVIEW
+		 WHERE REVIEW_NUM = #{reviewNum}
+	</delete>
+	
+	
+	
+	<!-- 나의 리뷰 목록 -->
+	
+	
+	<!-- 나의 리뷰 건 수 -->
+	<select id="myReviewCount" parameterType="String" resultType="int">
+		SELECT COUNT(REVIEW_NUM) AS REVIEW_NUM
+		  FROM ZIP_AGENT_REVIEW
+	   	 WHERE AGENT_ID = #{agentId}
+	</select>
+	
+	
+</mapper>
