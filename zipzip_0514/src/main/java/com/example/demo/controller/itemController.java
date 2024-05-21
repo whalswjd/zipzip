@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.dto.AgentItem;
+import com.example.demo.dto.InterestItem;
 import com.example.demo.dto.Item;
 import com.example.demo.dto.ItemOption;
 import com.example.demo.dto.Report;
@@ -462,9 +463,23 @@ public class itemController {
 		if(userId != null) {
 			//로그인 유저
 			model.addAttribute("user",userId);
+			
+			if(itemNum != 0) {
+				InterestItem item = new InterestItem();
+				item.setUserId(userId);
+				item.setItemNum(itemNum);
+				
+				int zzim = userService.interestItemFindSelect(item);
+				//log.info("zzim:"+zzim);
+				
+				if (zzim > 0) {
+					model.addAttribute("like",zzim);
+				}
+			}
 		}
 		else {
 			model.addAttribute("user"," ");
+			model.addAttribute("like",0);
 		}
 		
 		search.setItemNum(itemNum);
@@ -581,6 +596,37 @@ public class itemController {
 			code = -1;
 		}
 		return code;
+	}
+	
+	@RequestMapping("/likeitem")
+	@ResponseBody
+	public int likeItem (@RequestParam(value = "itemNum")long itemNum) {
+		int cnt = 0;
+		String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+		if(!userId.isEmpty() && itemNum != 0) {
+			InterestItem item = new InterestItem();
+			
+			item.setUserId(userId);
+			item.setItemNum(itemNum);
+			
+			int like = userService.interestItemFindSelect(item);
+			//log.info("like:"+like);
+			
+			if(like>0) {
+				cnt = userService.interestItemDelete(item);
+				//log.info("cnt:"+cnt);
+			}
+			else {
+				cnt = userService.interestItemInsert(item);
+				//log.info("cnt:"+cnt);
+			}
+		}
+		
+		//log.info("itemNum:"+itemNum);
+		//log.info("userId:"+userId);
+		//log.info("cnt:"+cnt);
+		
+		return cnt;
 	}
 	
 
