@@ -216,7 +216,18 @@ kakao.maps.load(function() {
 	function pageInit (){ 
 		var jsonString = '[[${first}]]'; 										//처음에 모델에 넣어준 리스트임(he문법 사용)
 		var decodedString = he.decode(jsonString);
-		var first = JSON.parse(decodedString);
+		console.log(decodedString);
+		var first;
+		try{
+			first = JSON.parse(decodedString);
+		}
+		catch(e){
+			first = decodedString;
+		}
+
+		//var first = JSON.parse(decodedString);
+		
+		
 		if('[[${lat}]]'!= null &&'[[${lat}]]'!= '' && '[[${lng}]]'!= null && '[[${lng}]]' != ''){
 			console.log('[[${lat}]]');
 			console.log('[[${lng}]]');
@@ -301,12 +312,6 @@ kakao.maps.load(function() {
 		     }
 		});
 	};
-	//지도 부드럽게 이동 함수
-	/* function panTo(coords) {
-		console.log("panTo함수, 매개변수 : "+coords);
-	    var moveLatLon = coords;
-	    map.panTo(moveLatLon);            
-	}; */
 
 	function searchAddrFromCoords(coords) {
 	    var total = 5;
