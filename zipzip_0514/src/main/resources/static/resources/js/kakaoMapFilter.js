@@ -197,7 +197,14 @@ function openFilterModal() {
 function initChk(){ 
 	$("input[type='checkbox']").prop("checked", true);
 	$('input[name="pType"][value="전체"]').prop('checked', true);
+	$("input[type='range']").val(100);
 	//filterList();
+	if(change){
+    		filterList();
+    	}
+    	else{
+    		applyFiltering();
+    	}
 };
 //체크박스가 변했을때
 function checkBox(){
