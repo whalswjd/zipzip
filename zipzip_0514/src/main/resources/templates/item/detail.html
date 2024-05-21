@@ -13,7 +13,13 @@
 <!-- top -->
     <div class="toolbar-container">
     	<div class="tool-icon"><img src="/resources/images/icon/goBack (2).png" class="inner-icon" id="goBack"></div>
-        <div class="tool-icon" style="margin-right:10%;"><img src="/resources/images/icon/heart (2).png" class="inner-icon" id="clickHeart"></div> 
+        <div th:if="${!(like > 0)}" class="tool-icon" style="margin-right:10%;">
+    		<img src="/resources/images/icon/heart (2).png" class="inner-icon" id="clickHeart">
+		</div>
+
+    	<div th:if="${like > 0}" class="tool-icon" style="margin-right:10%;">
+    		<img src="/resources/images/icon/filledHeart.png" class="inner-icon" id="clickfilledHeart">
+		</div>
     </div>
 <!-- top 끝-->
 <!-- 이미지 -->
@@ -398,6 +404,24 @@ $(document).ready(function(){
     $("#modalCloseButton").on("click",function(){
     	$("#modalContainer").hide();
     });
+    $("#clickHeart").on("click",function(){
+    	if('[[${user}]]' === 'null' || '[[${user}]]' == '' || '[[${user}]]' === 'anonymousUser'){
+  		  alert("찜은 로그인이 필요합니다.");
+  		  window.location.href="/user/login";
+  		}
+    	else{
+    		clickHeart();
+    	}
+    });
+    $("#clickfilledHeart").on("click",function(){
+    	if('[[${user}]]' === 'null' || '[[${user}]]' == '' || '[[${user}]]' === 'anonymousUser'){
+  		  alert("찜 삭제는 로그인이 필요합니다.");
+  		  window.location.href="/user/login";
+  		}
+    	else{
+    		clickHeart();
+    	}
+    });
     $("#modalContainer").on("click",function(){
     	if ($("#modalContainer").css("display") === "block") {
             $("#modalContainer").hide();
@@ -407,6 +431,7 @@ $(document).ready(function(){
     	//if로그인 여부 확인
     	if('[[${user}]]' === 'null' || '[[${user}]]' == '' || '[[${user}]]' === 'anonymousUser'){
     		  alert("신고하려면 로그인이 필요합니다.");
+    		  window.location.href="/user/login";
     	}
     	else{
     		console.log("user:",'[[${user}]]');
@@ -426,6 +451,38 @@ $(document).ready(function(){
     	}
     });
 });
+function clickHeart(){
+	var itemNum = [[${item.itemNum}]];
+	console.log(itemNum);
+	
+	$.ajax({
+		url:"/likeitem",
+		type: "POST",
+		dataType : "json",
+		data : {
+			itemNum : itemNum
+		},
+		success : function(data) {
+			console.log(data);
+			if(data == 0){
+				alert("로그인해주세요...");
+			}
+			else if(data == -1){
+				alert("에러");
+			}
+			else if(data > 0){
+				//alert("성공");
+				location.reload();
+			}
+			else{
+				alert("에러");
+			}
+		},
+		error : function() {
+		alert("error");
+		} 
+	});
+}
 function reportProblem(){
 	//alert("하이");
 	var form = parent.$("form[name=reportForm]").serialize();
