@@ -119,7 +119,7 @@ public class itemController {
 	}
 	
 	@GetMapping("/item/two")
-	public String two(Model model) {
+	public String two(@RequestParam(value="info", required=false) String info,Model model) {
 		String userId = SecurityContextHolder.getContext().getAuthentication().getName();
 	    User user = userService.findById(userId);
 		model.addAttribute("user",user);
@@ -129,7 +129,16 @@ public class itemController {
 		//일단 하드코딩으로 처음 로딩되는 범위 
 		search.setSearchType("T");
 		List<String> sl = new ArrayList<>();
-		sl.add("마포구");
+		if(info != null && !info.isEmpty()) {
+			sl.add(info);
+			Map<String, String> ret = itemService.getGeoCode(info);
+			model.addAttribute("lat", ret.get("lat"));
+			model.addAttribute("lng",ret.get("lng"));
+			log.info(ret.get("lat"),ret.get("lng"));
+		}
+		else {
+			sl.add("마포구");
+		}
 		search.setSearchAdd(sl);
 
 		List<Item> list = itemService.selectAptList(search);
@@ -185,7 +194,7 @@ public class itemController {
 	}
 	
 	@GetMapping("/item/off")
-	public String off(Model model) {
+	public String off(@RequestParam(value="info", required=false) String info,Model model) {
 		String userId = SecurityContextHolder.getContext().getAuthentication().getName();
 	    User user = userService.findById(userId);
 		model.addAttribute("user",user);
@@ -195,7 +204,16 @@ public class itemController {
 		//일단 하드코딩으로 처음 로딩되는 범위 
 		search.setSearchType("F");
 		List<String> sl = new ArrayList<>();
-		sl.add("마포구");
+		if(info != null && !info.isEmpty()) {
+			sl.add(info);
+			Map<String, String> ret = itemService.getGeoCode(info);
+			model.addAttribute("lat", ret.get("lat"));
+			model.addAttribute("lng",ret.get("lng"));
+			log.info(ret.get("lat"),ret.get("lng"));
+		}
+		else {
+			sl.add("마포구");
+		}
 		search.setSearchAdd(sl);
 		//log.info("search.getItemNum : {}", search.getSearchSize());
 		List<Item> list = itemService.selectAptList(search);
@@ -253,7 +271,7 @@ public class itemController {
 	
 
 	@GetMapping("/item/apt")
-	public String apt(Model model) {
+	public String apt(@RequestParam(value="info", required=false) String info,Model model) {
 		String userId = SecurityContextHolder.getContext().getAuthentication().getName();
 	    User user = userService.findById(userId);
 		model.addAttribute("user",user);
@@ -263,7 +281,16 @@ public class itemController {
 		//일단 하드코딩으로 처음 로딩되는 범위 
 		search.setSearchType("A");
 		List<String> sl = new ArrayList<>();
-		sl.add("마포구");
+		if(info != null && !info.isEmpty()) {
+			sl.add(info);
+			Map<String, String> ret = itemService.getGeoCode(info);
+			model.addAttribute("lat", ret.get("lat"));
+			model.addAttribute("lng",ret.get("lng"));
+			log.info(ret.get("lat"),ret.get("lng"));
+		}
+		else {
+			sl.add("마포구");
+		}
 		search.setSearchAdd(sl);
 		//log.info("search.getItemNum : {}", search.getSearchSize());
 		List<Item> list = itemService.selectAptList(search);
