@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.example.demo.dto.Agent;
+import com.example.demo.dto.Item;
 import com.example.demo.dto.ItemFile;
 import com.example.demo.dto.Manager;
 import com.example.demo.dto.News;
@@ -32,9 +33,11 @@ public class IndexController {
 //	private final AgentService agentService;
 //	private final ManagerService managerService;
 	
+	private final ItemService itemService;
+	
 	@GetMapping("/")
-	public String index(Model model) throws Exception {
-		List<Notice> noticeList = noticeService.selectAll();
+	public String index(Notice notice, Model model) throws Exception {
+		//List<Notice> noticeList = noticeService.selectAll(notice);
 		List<News> newsList = newsService.getNewsDatas();
 		
 //		String userId = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -43,7 +46,54 @@ public class IndexController {
 //		Agent agent = agentService.findById(userId);
 //		Manager manager = managerService.findById(userId);
 		
-		model.addAttribute("notice", noticeList);
+		List<Item> list = itemService.recent9item();
+		if(list!=null) {
+			for(int i=0;i<list.size();i++) {
+				//log.info("몇개? {}",list.get(i).getItemNum());
+				String tamp="";
+				switch(list.get(i).getItemPtype()) {
+					case "S" : tamp="매매"; break;
+					case "Y" : tamp="전세"; break;
+					case "M" : tamp="월세"; break;
+				}
+				
+				list.get(i).setItemPtype(tamp);
+				//보증금
+				long tmp = list.get(i).getItemDeposit();
+				if (tmp != 0) {
+					String a="";
+					if (tmp>=10000) {
+						a = String.valueOf(tmp/10000)+"억 ";
+						if (tmp % 10000 != 0) {
+					        a += String.valueOf(tmp % 10000);
+					    }
+					}
+					else {
+						a = String.valueOf(tmp);
+					}
+					list.get(i).setTransD(a);
+
+				}
+				//월세
+				tmp = list.get(i).getItemMonthPrice();
+				if (tmp != 0) {
+					String a="";
+					if (tmp>=10000) {
+						a = String.valueOf(tmp/10000)+"억 ";
+						if (tmp % 10000 != 0) {
+					        a += String.valueOf(tmp % 10000);
+					    }
+					}
+					else {
+						a = String.valueOf(tmp);
+					}
+					list.get(i).setTransM(a);
+				}
+			}
+			model.addAttribute("list",list);
+		}
+		
+		//model.addAttribute("notice", noticeList);
 		model.addAttribute("news", newsList);
 //		model.addAttribute("user", user);
 //		model.addAttribute("agent", agent);

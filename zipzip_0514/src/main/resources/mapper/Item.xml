@@ -248,5 +248,28 @@ INSERT INTO ZIP_REPORT (
         ,SYSDATE
         ,'P')
 </insert>
+<select id="recent9item" resultType="com.example.demo.dto.Item">
+SELECT ITEM_NUM,ITEM_NAME,ITEM_ADDRESS,ITEM_PTYPE,ITEM_ITYPE,
+       ITEM_DEPOSIT,ITEM_MONTH_PRICE,ITEM_AREA,ITEM_KIND,FILE_NAME
+FROM (SELECT ROWNUM RN,
+                NVL(A.ITEM_NUM,0) ITEM_NUM,
+                NVL(A.ITEM_NAME,'') ITEM_NAME,
+                NVL(A.ITEM_ADDRESS,'') ITEM_ADDRESS,
+                NVL(A.ITEM_PTYPE,'') ITEM_PTYPE,
+                NVL(A.ITEM_ITYPE,'') ITEM_ITYPE,
+                NVL(B.ITEM_DEPOSIT,0) ITEM_DEPOSIT,
+                NVL(B.ITEM_MONTH_PRICE,0) ITEM_MONTH_PRICE,
+                NVL(B.ITEM_AREA,0) ITEM_AREA,
+                NVL(B.ITEM_KIND,'') ITEM_KIND,
+                NVL(C.FILE_NAME,'') FILE_NAME
+          FROM ZIP_ITEM A, ZIP_ITEM_DETAIL B, (SELECT ITEM_NUM, FILE_NAME
+                                                  FROM ZIP_ITEM_FILE
+                                                 WHERE FILE_IDX = 1
+                                                 ORDER BY FILE_NUM ASC)C
+         WHERE A.ITEM_NUM = B.ITEM_NUM
+           AND B.ITEM_NUM = C.ITEM_NUM
+         ORDER BY A.REG_DATE DESC)
+ WHERE RN<![CDATA[<]]>10
+</select>
 
 </mapper>

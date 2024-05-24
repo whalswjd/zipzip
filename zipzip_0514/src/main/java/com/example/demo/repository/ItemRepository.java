@@ -29,5 +29,8 @@ public interface ItemRepository {
 	
 	//신고 인서트
 	public int insertReport (Report report);
+	
+	//mian
+	public List<Item> recent9item ();
 
 }

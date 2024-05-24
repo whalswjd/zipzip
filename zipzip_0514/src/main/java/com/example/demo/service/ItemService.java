@@ -283,5 +283,17 @@ public class ItemService {
 	   }
 	   return res;
    }
+   
+   //for main page
+   public List<Item> recent9item (){
+	   List<Item> list = null;
+	   try {
+		   list = itemRepository.recent9item();
+	   }
+	   catch(Exception e) {
+		   log.debug("[ItemService] recent9item Exception",e);
+	   }
+	   return list;
+   }
 
 }
