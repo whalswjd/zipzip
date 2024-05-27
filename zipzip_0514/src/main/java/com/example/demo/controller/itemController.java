@@ -497,7 +497,6 @@ public class itemController {
 				item.setItemNum(itemNum);
 				
 				int zzim = userService.interestItemFindSelect(item);
-				//log.info("zzim:"+zzim);
 				
 				if (zzim > 0) {
 					model.addAttribute("like",zzim);
