@@ -48,11 +48,11 @@
 <script src="/resources/js/kakaoMapFilter.js"></script>
 		      <ul class="menu-list">
 				<li class="menu-item">
-				  <input type="button" class="menu-button menu-button--delete" id="openFilter" value="검색조건 열기/닫기" onclick="openFilterModal()">
+				  <input type="button" class="menu-button menu-button--delete" id="openFilter" value="검색조건 열기/닫기📌" onclick="openFilterModal()">
 				</li>
     		</ul>
     		<ul class="menu-list" style="display:none;" id="filterModal">
-		      <li class="menu-item"><input type="button" class="menu-button" value="평수">
+		      <li class="menu-item"><input type="button" class="menu-button" value="평수📏">
 			      <ul class="menu-sub-list">
 			      <li class="menu-item" style="display: flex;">
 			      <input type="checkbox" id="chkAll" class="menu-checkbox" name="searchSize" checked>
@@ -76,7 +76,7 @@
 			    </li>
 			      </ul>
     		</li>
-      <li class="menu-item"><input type="button" class="menu-button menu-button--black" value="거래유형">
+      <li class="menu-item"><input type="button" class="menu-button menu-button--black" value="거래유형💰">
          <ul class="menu-sub-list">
 		    <li class="menu-item">
 		      <label class="menu-button" for="all">
@@ -216,7 +216,19 @@ kakao.maps.load(function() {
 	function pageInit (){ 
 		var jsonString = '[[${first}]]'; 										//처음에 모델에 넣어준 리스트임(he문법 사용)
 		var decodedString = he.decode(jsonString);
-		var first = JSON.parse(decodedString);
+		var first;
+		try{
+			first = JSON.parse(decodedString);
+		}
+		catch(e){
+			first = decodedString;
+		}
+		if('[[${lat}]]'!= null &&'[[${lat}]]'!= '' && '[[${lng}]]'!= null && '[[${lng}]]' != ''){
+			console.log('[[${lat}]]');
+			console.log('[[${lng}]]');
+			var moveLatLon = new kakao.maps.LatLng('[[${lat}]]', '[[${lng}]]');
+			map.setCenter(moveLatLon);
+		}
 		for (var i = 0; i < first.length; i++) {
 		    var position = {
 		        title: first[i].addressName,
@@ -486,7 +498,7 @@ function searchList (search){
 				<!-- 여기에 우측 사이드바 내용을 추가하세요 -->
 					
 				<!-- 매물 리스트 시작-->
-				<div class="properties-box-column" id="changable">
+				<div class="properties-box-column" id="changable" style=" overflow-x: hidden;">
 					<div>
 						<!-- 매물 1개 시작 'openIframe(\'' + ${item.itemNum} + '\')' -->
 						<div class="properties-box" th:each="item : ${list}" 
@@ -513,7 +525,11 @@ function searchList (search){
 										<span id="add" th:text="${item.itemAddress}"></span>
 									</div>
 									<div class="item-intro">
-										<span th:text="${item.itemIntro}"></span>
+										
+										<span th:if="${#strings.length(item.itemIntro) > 15}"
+									          th:text="${#strings.substring(item.itemIntro, 0, 15)} + '...'"></span>
+									    <span th:if="${#strings.length(item.itemIntro) <= 15}" 
+									          th:text="${item.itemIntro}"></span>
 									</div>
 								</div>
 							</div>
